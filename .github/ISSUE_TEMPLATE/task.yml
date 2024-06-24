@@ -2,7 +2,6 @@
 name: Task
 title: "[Task] your title goes here"
 description: "get people to do something"
-assignees: 
 body:
   - type: textarea
     id: description
