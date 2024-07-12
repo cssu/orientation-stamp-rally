@@ -1,0 +1,22 @@
+---
+name: Task
+title: "[Task] your title goes here"
+description: "get people to do something"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Task
+      description: "What's the task?"
+      placeholder: "I need to implement a pop up that allows me to harvest your bank account details"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps
+      description: "How do you complete this task?"
+      placeholder: "- [ ] Get our SWEs to implement this ethically questionable feature in exchange for donuts"
+    validations:
+      required: false
+---
