@@ -12,6 +12,7 @@ import {
 import React from 'react'
 import Link from 'next/link'
 import { Button } from './ui/button'
+import Login from './login'
 
 export default function NavigationList() {
     return (
@@ -58,7 +59,7 @@ export default function NavigationList() {
                     </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <Button>Login</Button>
+                    <Login />
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
