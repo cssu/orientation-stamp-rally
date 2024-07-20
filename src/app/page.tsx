@@ -1,8 +1,22 @@
+'use client'
+
 import CountUp from '@/components/countup'
 import { Button } from '@/components/ui/button'
+import { access } from 'fs'
 import Image from 'next/image'
+import { useState, useEffect } from 'react'
 
 export default function Home() {
+    const [accessedBooths, setAccessedBooths] = useState(null)
+
+    useEffect(() => {
+        if (!accessedBooths) {
+            fetch('/api/get-accessed-booths', { method: 'GET' })
+                .then((resp) => resp.json())
+                .then((json) => setAccessedBooths(json))
+        }
+    })
+
     return (
         // <main className="flex min-h-screen flex-col items-center justify-between p-24">
         //     user email = test@mail.utoronto.ca
@@ -30,8 +44,21 @@ export default function Home() {
                     </div>
                 </div>
             </section> */}
+            <center>
+                <h1 style={{ fontSize: 36 }}>
+                    <b>Stamp Rally Demo:</b>
+                </h1>
+            </center>
             <div className="container mt-8">
                 <div className="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
+                    <Button size={'lg'} className="text-xl" style={{ height: 70 }}>
+                        <a href="/leader">Show QR codes for booth (for leaders)</a>
+                    </Button>
+                    <Button size={'lg'} className="text-xl" style={{ height: 70 }}>
+                        <a href="/view-accessed-booths">
+                            View booths you've accessed (for students)
+                        </a>
+                    </Button>
                     <div className="px-4">
                         <h1 className="scroll-m-20 text-xl font-extrabold tracking-tight lg:text-5xl">
                             CSSU Orientation {<CountUp start={1980} end={2024} duration={4} />} is
@@ -58,6 +85,15 @@ export default function Home() {
                             height={504}
                         />
                     </div>
+                    {accessedBooths === null ? (
+                        <h1>Loading accessed booths...</h1>
+                    ) : (
+                        <ul>
+                            {accessedBooths.map((booth) => (
+                                <li>{booth}</li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             </div>
         </main>
