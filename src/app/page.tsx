@@ -51,7 +51,8 @@ export default function Home() {
                     </div>
                     <div className="relative ms-4 p-4">
                         <Image
-                            className="w-full rounded-md"
+                            priority
+                            className="w-full rounded-md dark:invert"
                             src="/cssu-integrated.svg"
                             alt="CSSU logo with text reading 'Computer Science Student Union'"
                             width={506}
