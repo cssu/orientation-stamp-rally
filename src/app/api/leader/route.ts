@@ -1,5 +1,5 @@
-import type { NextApiRequest } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(req: NextApiRequest) {
-    return Response.json({ message: 'ack' })
+export async function GET(req: NextRequest) {
+    return NextResponse.json({ message: 'ack' })
 }
