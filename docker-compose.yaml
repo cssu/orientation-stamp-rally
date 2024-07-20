@@ -11,6 +11,26 @@ networks:
     orientation:
 
 services:
+    orientation_app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: orientation-app
+        restart: unless-stopped
+        stop_signal: SIGINT
+        stop_grace_period: 5m
+        tty: true
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+        ports:
+            - 0.0.0.0:3001:3000
+        env_file:
+            - .env
+        networks:
+            - orientation
+        <<: *logging
+
     postgres:
         image: postgres:latest
         container_name: postgres
@@ -19,7 +39,7 @@ services:
         stop_signal: SIGINT
         stop_grace_period: 5m
         tty: true
-        # shm_size: 256mb
+        shm_size: 256mb
         volumes:
             - /etc/localtime:/etc/localtime:ro
             - /etc/timezone:/etc/timezone:ro
