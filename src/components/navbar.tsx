@@ -4,7 +4,7 @@ import CSSULogo from './cssu-logo'
 
 export default function Navbar() {
     return (
-        <nav className="relative inset-x-0 top-0 z-50 shadow-sm bg-background dark:bg-gray-950/90">
+        <nav className="relative inset-x-0 top-0 z-50 shadow-sm bg-background dark:black">
             <div className="w-full max-w-7xl mx-auto px-4">
                 <div className="flex justify-between h-20 items-center">
                     <Link href="/" className="flex items-center" prefetch={false}>
