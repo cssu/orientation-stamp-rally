@@ -112,7 +112,6 @@ export async function login(email: string, otp: string): Promise<LoginResult> {
     if (storedOtp !== otp) {
         const incremented = await redis.ephemeral.incr(`${email}:attempts`)
         if (incremented === MAX_OTP_ATTEMPTS) {
-            console.log('Exceeded attempts after this call')
             const [, lastGenerated] = await Promise.all([
                 redis.ephemeral.del(`${email}:otp`),
                 redis.ephemeral.get(`${email}:lastGenerated`)
