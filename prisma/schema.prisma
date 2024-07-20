@@ -1,0 +1,56 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note: Do not switch UUID generation logic to dbgenerated with uuid_generate_v4.
+// Since Postgres 13, there is gen_random_uuid which doesn't require any extensions.
+model User {
+  userId         String   @id @default(uuid()) @db.Uuid
+  email          String   @unique @db.VarChar(100)
+  fullName       String?  @db.VarChar(100)
+  role           UserRole @default(participant)
+  organizationId String?  @db.Uuid
+  createdAt      DateTime @default(now()) @db.Timestamp(0)
+
+  organization Organization? @relation(fields: [organizationId], references: [organizationId])
+
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  token     String   @id @unique @db.Char(64)
+  userId    String   @db.Uuid
+  deviceId  String   @db.Uuid
+  userAgent String?  @db.VarChar(255)
+  platform  String?  @db.VarChar(16)
+  expiresAt DateTime @default(dbgenerated("now() + INTERVAL '30 days'")) @db.Timestamp(0)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  user      User     @relation(fields: [userId], references: [userId])
+
+  @@unique([userId, deviceId])
+}
+
+model Organization {
+  organizationId String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(100)
+  createdAt      DateTime @default(now()) @db.Timestamp(0)
+
+  users User[]
+}
+
+model ExemptedEmail {
+  email      String   @id @db.VarChar(100)
+  reason     String   @db.VarChar(255)
+  approvedAt DateTime @default(now()) @db.Timestamp(0)
+}
+
+enum UserRole {
+  participant
+  reward_issuer
+  admin
+}
