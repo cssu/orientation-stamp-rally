@@ -27,14 +27,14 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'docker-compose build'
+                sh 'sudo docker-compose build'
             }
         }
         
         stage('Deploy and Migrate') {
             steps {
                 script {
-                    sh 'docker-compose up -d'
+                    sh 'sudo docker-compose up -d'
                 }
             }
         }
