@@ -4,6 +4,7 @@ import CountUp from '@/components/countup'
 import { Button } from '@/components/ui/button'
 import { access } from 'fs'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
 export default function Home() {
@@ -21,7 +22,7 @@ export default function Home() {
         // <main className="flex min-h-screen flex-col items-center justify-between p-24">
         //     user email = test@mail.utoronto.ca
         // </main>
-        <main className="flex grow items-stretch flex-col justify-between p-24">
+        <main className="flex grow items-stretch flex-col justify-between">
             {/* <Image src="/cssu-integrated.svg" width={400} height={376} alt="CSSU" /> */}
 
             {/* <section className="relative overflow-visible">
@@ -51,14 +52,24 @@ export default function Home() {
             </center>
             <div className="container mt-8">
                 <div className="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
-                    <Button size={'lg'} className="text-xl" style={{ height: 70 }}>
-                        <a href="/leader">Show QR codes for booth (for leaders)</a>
-                    </Button>
-                    <Button size={'lg'} className="text-xl" style={{ height: 70 }}>
-                        <a href="/view-accessed-booths">
+                    <Link href="/leader">
+                        <Button
+                            size={'lg'}
+                            className="text-xl"
+                            style={{ height: 70, width: '100%' }}
+                        >
+                            Show QR codes for booth (for leaders)
+                        </Button>
+                    </Link>
+                    <Link href="/view-accessed-booths">
+                        <Button
+                            size={'lg'}
+                            className="text-xl"
+                            style={{ height: 70, width: '100%' }}
+                        >
                             View booths you've accessed (for students)
-                        </a>
-                    </Button>
+                        </Button>
+                    </Link>
                     <div className="px-4">
                         <h1 className="scroll-m-20 text-xl font-extrabold tracking-tight lg:text-5xl">
                             CSSU Orientation {<CountUp start={1980} end={2024} duration={4} />} is
