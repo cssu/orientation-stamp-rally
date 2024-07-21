@@ -52,6 +52,7 @@ JWT_SECRET=${JWT_SECRET}
     
     post {
         success {
+            publishChecks name: 'Deployment', title: 'Build', summary: 'Success', text: "Successfully built and deployed the application", detailsURL: 'https://ci.jenkins.io'
             setBuildStatus("Build succeeded", "SUCCESS")
         }
         failure {
