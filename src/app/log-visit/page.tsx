@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-export default function LogVisitPage(props) {
+export default function LogVisitPage(props: any) {
     const [isValidHMAC, setIsValidHMAC] = useState(null)
     const [hasBeenLogged, setHasBeenLogged] = useState(false)
     const [alreadyDone, setAlreadyDone] = useState(null)
     const searchParams = useSearchParams()
-    const qr = searchParams.get('qr')
+    const qr = searchParams.get('qr')!
     const [timestamp, boothID, signature] = qr.split('-')
 
     useEffect(() => {
@@ -35,11 +35,10 @@ export default function LogVisitPage(props) {
                 .then(({ alreadyDone }) => setAlreadyDone(alreadyDone))
             setHasBeenLogged(true)
         }
-    })
+    }, [isValidHMAC, hasBeenLogged, boothID])
 
     if (isValidHMAC === null) {
-        return
-        ;<h1 style={{ paddingLeft: '10vw', paddingRight: '10vw', fontSize: 30 }}>Loading...</h1>
+        return <h1 style={{ paddingLeft: '10vw', paddingRight: '10vw', fontSize: 30 }}>Loading...</h1>
     } else if (isValidHMAC) {
         return (
             <h1 style={{ paddingLeft: '10vw', paddingRight: '10vw', fontSize: 30 }}>
@@ -55,9 +54,9 @@ export default function LogVisitPage(props) {
                 )}{' '}
                 You can go to the{' '}
                 <a href="/view-accessed-booths" style={{ textDecoration: 'underline' }}>
-                    "View Accessed Booths"
+                    &apos;View Accessed Booths&apos;
                 </a>{' '}
-                page to see all the booths you've accessed.
+                page to see all the booths you&apos;ve accessed.
             </h1>
         )
     } else {
