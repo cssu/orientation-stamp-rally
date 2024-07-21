@@ -1,5 +1,4 @@
 # Version is now obsolete. This compose configuration assumes version 3.8.
-
 name: cssu-orientation
 
 x-logging: &logging

@@ -27,14 +27,14 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'docker-compose build'
+                sh 'docker compose build'
             }
         }
         
         stage('Deploy and Migrate') {
             steps {
                 script {
-                    sh 'docker-compose up -d'
+                    sh 'docker compose up -d'
                 }
             }
         }
@@ -42,7 +42,7 @@ pipeline {
     
     post {
         failure {
-            sh 'docker-compose down'
+            sh 'docker compose down'
         }
     }
 }
