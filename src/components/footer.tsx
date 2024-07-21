@@ -3,7 +3,6 @@
  * @see https://v0.dev/t/RxBIaIfCJdt
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
-import Image from 'next/image'
 import Link from 'next/link'
 import CSSULogo from './cssu-logo'
 

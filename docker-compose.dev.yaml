@@ -1,0 +1,77 @@
+# This is a DEVELOPMENT ONLY docker-compose configuration file.
+# To run this during development, use the following command:
+# docker-compose -f docker-compose.dev.yaml up -d
+# Additionally, start the Next.js server via `yarn dev`.
+
+# Version is now obsolete. This compose configuration assumes version 3.8.
+
+x-logging: &logging
+    logging:
+        driver: 'json-file'
+        options:
+            max-file: '10'
+            max-size: '1gb'
+
+networks:
+    orientation:
+        driver: bridge
+
+services:
+    postgres:
+        image: postgres:latest
+        container_name: postgres
+        pull_policy: always
+        restart: unless-stopped
+        stop_signal: SIGINT
+        stop_grace_period: 5m
+        tty: true
+        shm_size: 256mb
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+            - ./db:/var/lib/postgresql/data:rw
+        ports:
+            - 127.0.0.1:5432:5432
+        environment:
+            - POSTGRES_USER=orientation
+        env_file:
+            - .env
+        networks:
+            - orientation
+        <<: *logging
+
+    redis_ephemeral:
+        image: redis:latest
+        container_name: redis-ephemeral
+        pull_policy: always
+        restart: unless-stopped
+        stop_signal: SIGINT
+        stop_grace_period: 5m
+        tty: true
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+        ports:
+            - 127.0.0.1:6379:6379
+        networks:
+            - orientation
+        <<: *logging
+
+    redis_persistent:
+        image: redis:latest
+        container_name: redis-persistent
+        command: redis-server --appendonly yes
+        pull_policy: always
+        restart: unless-stopped
+        stop_signal: SIGINT
+        stop_grace_period: 5m
+        tty: true
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+            - ./redisdb:/data:rw
+        ports:
+            - 127.0.0.1:6380:6379
+        networks:
+            - orientation
+        <<: *logging
