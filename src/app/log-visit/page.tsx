@@ -17,7 +17,7 @@ export default function LogVisitPage(props: any) {
                 method: 'GET',
             })
                 .then((resp) => resp.json())
-                .then((json) => setIsValidHMAC(json.valid))
+                .then((json: any) => setIsValidHMAC(json.valid))
         }
     })
 

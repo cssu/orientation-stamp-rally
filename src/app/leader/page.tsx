@@ -5,11 +5,11 @@ import { QRCodeSVG } from 'qrcode.react'
 import { Button } from '@/components/ui/button'
 
 export default function LeaderPage() {
-    const [allBooths, setAllBooths] = useState(null)
+    const [allBooths, setAllBooths] = useState<any>(null)
     const [qrCode, setQRCode] = useState('')
     const [lastRefreshed, setLastRefreshed] = useState(Date.now())
     const [curTime, setCurTime] = useState(Date.now())
-    const [boothID, setBoothID] = useState(null)
+    const [boothID, setBoothID] = useState<any>(null)
     const [curBoothID, setCurBoothID] = useState(null)
 
     const websiteRoot = 'https://' + window.location.hostname
@@ -22,10 +22,10 @@ export default function LeaderPage() {
             fetch(
                 '/api/leader?' +
                     new URLSearchParams({
-                        boothid: boothID.toString().replace('-', '+'),
+                        boothid: boothID.toString().replace('-', '+')
                     }),
                 {
-                    method: 'GET',
+                    method: 'GET'
                 }
             )
                 .then((resp) => {
@@ -104,12 +104,13 @@ export default function LeaderPage() {
                         className="grid grid-cols-4 gap-4"
                         style={{ marginLeft: '10vw', marginRight: '10vw' }}
                     >
-                        {allBooths.map((booth) => (
+                        {allBooths.map((booth: any, index: any) => (
                             <Button
                                 size={'lg'}
                                 className="text-xl"
                                 style={{ height: 70 }}
                                 onClick={() => setBoothID(booth)}
+                                key={index}
                             >
                                 {booth}
                             </Button>
