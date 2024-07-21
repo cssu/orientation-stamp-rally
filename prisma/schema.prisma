@@ -5,6 +5,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"] // This is required for alpine based docker images
 }
 
 // Note: Do not switch UUID generation logic to dbgenerated with uuid_generate_v4.

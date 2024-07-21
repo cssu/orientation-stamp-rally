@@ -9,8 +9,27 @@ x-logging: &logging
 
 networks:
     orientation:
+        driver: bridge
 
 services:
+    migrations:
+        build:
+            context: ./prisma
+            dockerfile: Dockerfile
+        container_name: migrations
+        tty: true
+        depends_on:
+            postgres:
+                condition: service_healthy
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+        environment:
+            - DATABASE_URL=postgresql://orientation:${POSTGRES_PASSWORD}@postgres:5432
+        networks:
+            - orientation
+        <<: *logging
+
     orientation_app:
         build:
             context: .
@@ -20,6 +39,15 @@ services:
         stop_signal: SIGINT
         stop_grace_period: 5m
         tty: true
+        depends_on:
+            postgres:
+                condition: service_healthy
+            redis_ephemeral:
+                condition: service_healthy
+            redis_persistent:
+                condition: service_healthy
+            migrations:
+                condition: service_completed_successfully
         volumes:
             - /etc/localtime:/etc/localtime:ro
             - /etc/timezone:/etc/timezone:ro
@@ -27,6 +55,8 @@ services:
             - 0.0.0.0:3001:3000
         env_file:
             - .env
+        environment:
+            - DATABASE_URL=postgresql://orientation:${POSTGRES_PASSWORD}@postgres:5432
         networks:
             - orientation
         <<: *logging
@@ -40,6 +70,12 @@ services:
         stop_grace_period: 5m
         tty: true
         shm_size: 256mb
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready']
+            interval: 60s
+            timeout: 5s
+            retries: 5
+            start_period: 40s
         volumes:
             - /etc/localtime:/etc/localtime:ro
             - /etc/timezone:/etc/timezone:ro
@@ -62,6 +98,12 @@ services:
         stop_signal: SIGINT
         stop_grace_period: 5m
         tty: true
+        healthcheck:
+            test: ['CMD', 'redis-cli', 'ping']
+            interval: 60s
+            timeout: 5s
+            retries: 3
+            start_period: 40s
         volumes:
             - /etc/localtime:/etc/localtime:ro
             - /etc/timezone:/etc/timezone:ro
@@ -73,13 +115,19 @@ services:
 
     redis_persistent:
         image: redis:latest
-        container_name: redis-persistent
+        container_name: redis_persistent
         command: redis-server --appendonly yes
         pull_policy: always
         restart: unless-stopped
         stop_signal: SIGINT
         stop_grace_period: 5m
         tty: true
+        healthcheck:
+            test: ['CMD', 'redis-cli', 'ping']
+            interval: 60s
+            timeout: 5s
+            retries: 3
+            start_period: 40s
         volumes:
             - /etc/localtime:/etc/localtime:ro
             - /etc/timezone:/etc/timezone:ro
