@@ -8,3 +8,4 @@ redisdb
 README.md
 .DS_STORE
 LICENSE
+Jenkinsfile
