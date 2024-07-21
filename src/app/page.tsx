@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
 export default function Home() {
-    const [accessedBooths, setAccessedBooths] = useState(null)
+    const [accessedBooths, setAccessedBooths] = useState<any>(null)
 
     useEffect(() => {
         if (!accessedBooths) {
@@ -67,7 +67,7 @@ export default function Home() {
                             className="text-xl"
                             style={{ height: 70, width: '100%' }}
                         >
-                            View booths you've accessed (for students)
+                            View booths you&apos;ve accessed (for students)
                         </Button>
                     </Link>
                     <div className="px-4">
@@ -101,8 +101,8 @@ export default function Home() {
                         <h1>Loading accessed booths...</h1>
                     ) : (
                         <ul>
-                            {accessedBooths.map((booth) => (
-                                <li>{booth}</li>
+                            {accessedBooths.map((booth: any, index: number) => (
+                                <li key={index}>{booth}</li>
                             ))}
                         </ul>
                     )}
