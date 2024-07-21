@@ -17,7 +17,7 @@ export default function ViewAccessedBooths() {
     })
 
     return (
-        <div style={{ paddingLeft: 200 }}>
+        <div style={{ paddingLeft: '10vw' }}>
             <p>
                 <a href="/" style={{ fontStyle: 'underline' }}>
                     ← Go back home
@@ -40,6 +40,7 @@ export default function ViewAccessedBooths() {
                     Clear all history
                 </Button>
             </h1>
+            <br />
             {accessedBooths === null ? (
                 <h1 style={{ fontSize: 24 }}>Loading accessed booths...</h1>
             ) : accessedBooths.length > 0 ? (

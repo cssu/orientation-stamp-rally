@@ -39,10 +39,10 @@ export default function LogVisitPage(props) {
 
     if (isValidHMAC === null) {
         return
-        ;<h1 style={{ paddingLeft: 200, paddingRight: 200, fontSize: 30 }}>Loading...</h1>
+        ;<h1 style={{ paddingLeft: '10vw', paddingRight: '10vw', fontSize: 30 }}>Loading...</h1>
     } else if (isValidHMAC) {
         return (
-            <h1 style={{ paddingLeft: 200, paddingRight: 200, fontSize: 30 }}>
+            <h1 style={{ paddingLeft: '10vw', paddingRight: '10vw', fontSize: 30 }}>
                 {!alreadyDone ? (
                     <>
                         Your attendance at booth <b>{boothID}</b> was recorded.
@@ -62,7 +62,7 @@ export default function LogVisitPage(props) {
         )
     } else {
         return (
-            <h1 style={{ paddingLeft: 200, paddingRight: 200, fontSize: 30 }}>
+            <h1 style={{ paddingLeft: '10vw', paddingRight: '10vw', fontSize: 30 }}>
                 Invalid QR code. This may be because the time for the QR code has elapsed, or
                 because the QR code is wrong.
             </h1>

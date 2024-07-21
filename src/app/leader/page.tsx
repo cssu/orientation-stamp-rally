@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { Button } from '@/components/ui/button'
 
-const websiteRoot = `http://localhost:3000`
-
 export default function LeaderPage() {
     const [allBooths, setAllBooths] = useState(null)
     const [qrCode, setQRCode] = useState('')
@@ -13,6 +11,8 @@ export default function LeaderPage() {
     const [curTime, setCurTime] = useState(Date.now())
     const [boothID, setBoothID] = useState(null)
     const [curBoothID, setCurBoothID] = useState(null)
+
+    const websiteRoot = 'https://' + window.location.hostname
 
     useEffect(() => {
         console.log('BOOTH ID: ' + boothID)
