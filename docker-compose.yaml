@@ -17,7 +17,7 @@ services:
         build:
             context: ./prisma
             dockerfile: Dockerfile
-        container_name: migrations
+        container_name: migrations-orientation
         tty: true
         depends_on:
             postgres:
@@ -64,7 +64,7 @@ services:
 
     postgres:
         image: postgres:latest
-        container_name: postgres
+        container_name: postgres-orientation
         pull_policy: always
         restart: unless-stopped
         stop_signal: SIGINT
@@ -93,7 +93,7 @@ services:
 
     redis_ephemeral:
         image: redis:latest
-        container_name: redis-ephemeral
+        container_name: redis-ephemeral-orientation
         pull_policy: always
         restart: unless-stopped
         stop_signal: SIGINT
@@ -116,7 +116,7 @@ services:
 
     redis_persistent:
         image: redis:latest
-        container_name: redis_persistent
+        container_name: redis_persistent-orientation
         command: redis-server --appendonly yes
         pull_policy: always
         restart: unless-stopped
