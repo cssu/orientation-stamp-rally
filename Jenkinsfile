@@ -1,13 +1,3 @@
-void setBuildStatus(String message, String state) {
-    step([
-        $class: "GitHubCommitStatusSetter",
-        reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/cssu/orientation-stamp-rally"],
-        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-        errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-        statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-    ]);
-}
-
 pipeline {
     agent any
     
@@ -52,12 +42,19 @@ JWT_SECRET=${JWT_SECRET}
     
     post {
         success {
-            publishChecks name: 'Deployment', title: 'Build', summary: 'Success', text: "Successfully built and deployed the application", detailsURL: 'https://ci.jenkins.io'
-            setBuildStatus("Build succeeded", "SUCCESS")
+            publishChecks name: 'Jenkins CI', 
+                          title: 'Build Succeeded', 
+                          summary: 'The build completed successfully',
+                          text: 'All stages completed without any issues',
+                          conclusion: 'SUCCESS'
         }
         failure {
+            publishChecks name: 'Jenkins CI', 
+                          title: 'Build Failed', 
+                          summary: 'The build failed',
+                          text: 'One or more stages failed. Docker compose was shut down.',
+                          conclusion: 'FAILURE'
             sh 'docker compose down'
-            setBuildStatus("Build failed", "FAILURE")
         }
     }
 }
