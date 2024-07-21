@@ -1,0 +1,11 @@
+.github
+.prettierrc
+.vscode
+db
+redisdb
+.env.example
+.gitignore
+README.md
+.DS_STORE
+LICENSE
+Jenkinsfile
