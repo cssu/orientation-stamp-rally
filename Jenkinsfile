@@ -15,10 +15,10 @@ pipeline {
                         string(credentialsId: '6a92ef53-8130-4dd8-968f-12600d877ec4', variable: 'POSTGRES_PASSWORD'),
                         string(credentialsId: '81758b43-11de-4075-a725-9157d2ea11bf', variable: 'JWT_SECRET')
                     ]) {
-                        def envContent = """
-                        POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-                        JWT_SECRET=${JWT_SECRET}
-                        """
+                        def envContent = '''
+                        POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+                        JWT_SECRET=$JWT_SECRET
+                        '''
                         writeFile file: '.env', text: envContent
                     }
                 }
@@ -27,14 +27,14 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'sudo docker-compose build'
+                sh 'docker-compose build'
             }
         }
         
         stage('Deploy and Migrate') {
             steps {
                 script {
-                    sh 'sudo docker-compose up -d'
+                    sh 'docker-compose up -d'
                 }
             }
         }
