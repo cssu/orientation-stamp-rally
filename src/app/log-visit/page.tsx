@@ -2,32 +2,32 @@
 
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { isValid } from 'zod'
 
 export default function LogVisitPage(props: any) {
     const [isValidHMAC, setIsValidHMAC] = useState(null)
     const [hasBeenLogged, setHasBeenLogged] = useState(false)
     const [alreadyDone, setAlreadyDone] = useState(null)
     const searchParams = useSearchParams()
-    const qr = searchParams.get('qr')!
+    const qr = searchParams.get('qr') || '--' // If no QR code, set it to be such that timestamp, boothID, and signature are empty
     const [timestamp, boothID, signature] = qr.split('-')
 
     useEffect(() => {
         if (isValidHMAC === null) {
             fetch('/api/visit?' + searchParams.toString(), {
-                method: 'GET',
+                method: 'GET'
             })
                 .then((resp) => resp.json())
                 .then((json: any) => setIsValidHMAC(json.valid))
         }
-    })
+    }, [isValidHMAC, searchParams, setIsValidHMAC])
 
     useEffect(() => {
-        console.log(isValidHMAC, hasBeenLogged)
         if (isValidHMAC === true && !hasBeenLogged) {
             fetch(
                 '/api/log-booth?' +
                     new URLSearchParams({
-                        boothid: boothID,
+                        boothid: boothID
                     }),
                 { method: 'GET' }
             )
@@ -35,10 +35,12 @@ export default function LogVisitPage(props: any) {
                 .then(({ alreadyDone }) => setAlreadyDone(alreadyDone))
             setHasBeenLogged(true)
         }
-    }, [isValidHMAC, hasBeenLogged, boothID])
+    }, [isValidHMAC, hasBeenLogged, boothID, setAlreadyDone, setHasBeenLogged])
 
     if (isValidHMAC === null) {
-        return <h1 style={{ paddingLeft: '10vw', paddingRight: '10vw', fontSize: 30 }}>Loading...</h1>
+        return (
+            <h1 style={{ paddingLeft: '10vw', paddingRight: '10vw', fontSize: 30 }}>Loading...</h1>
+        )
     } else if (isValidHMAC) {
         return (
             <h1 style={{ paddingLeft: '10vw', paddingRight: '10vw', fontSize: 30 }}>
