@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { access } from 'fs'
 
 export default function ViewAccessedBooths() {
-    const [accessedBooths, setAccessedBooths] = useState(null)
+    const [accessedBooths, setAccessedBooths] = useState<string[][] | null>(null)
 
     useEffect(() => {
         fetch('/api/get-accessed-booths', { method: 'GET' })
@@ -14,7 +14,7 @@ export default function ViewAccessedBooths() {
                 console.log(json)
                 return setAccessedBooths(json)
             })
-    })
+    }, [setAccessedBooths])
 
     return (
         <div style={{ paddingLeft: '10vw' }}>
@@ -31,7 +31,7 @@ export default function ViewAccessedBooths() {
                         fetch(
                             '/api/log-booth?' +
                                 new URLSearchParams({
-                                    boothid: 'clear-all',
+                                    boothid: 'clear-all'
                                 }),
                             { method: 'GET' }
                         )
