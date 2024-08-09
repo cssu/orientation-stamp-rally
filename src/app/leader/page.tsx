@@ -42,7 +42,7 @@ export default function LeaderPage() {
         }
         const intervalId = setInterval(handleInterval, 1000)
         return () => clearInterval(intervalId)
-    }, [boothID])
+    }, [boothID, setQRCode, setLastRefreshed])
 
     useEffect(() => {
         if (!allBooths) {
@@ -50,7 +50,7 @@ export default function LeaderPage() {
                 .then((resp) => resp.json())
                 .then((json) => setAllBooths(json))
         }
-    })
+    }, [allBooths, setAllBooths])
 
     if (boothID) {
         return (
