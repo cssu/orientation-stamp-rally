@@ -20,7 +20,7 @@ type LoginResult = {
     formMessage?: string
 }
 
-function generateAcessToken(userId: string, email: string, role: string): string {
+function generateAccessToken(userId: string, email: string, role: string): string {
     return jwt.sign({ userId, email, role }, process.env.JWT_SECRET!, {
         expiresIn: '15m'
     })
@@ -159,7 +159,7 @@ export async function login(email: string, otp: string): Promise<LoginResult> {
         })
     }
 
-    const accessToken = generateAcessToken(user.userId, user.email, user.role)
+    const accessToken = generateAccessToken(user.userId, user.email, user.role)
     const refreshToken = generateRefreshToken()
 
     const userAgent = headers().get('User-Agent')

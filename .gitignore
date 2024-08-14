@@ -3,6 +3,9 @@
 # environment
 .env
 
+#other directories
+.idea/
+
 # dependencies
 /node_modules
 /.pnp
