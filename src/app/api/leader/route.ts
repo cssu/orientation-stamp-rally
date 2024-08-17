@@ -13,7 +13,8 @@ interface boothDetails {
 }
 let boothInfo: { [boothID: string]: boothDetails } = {};
 
-const REFRESH_TIME = 15000;
+
+const FIFTEEN_SECONDS_IN_MS = 15000;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url || "");
@@ -31,7 +32,7 @@ export async function GET(req: NextRequest) {
 
   if (
     !boothInfo[boothID] ||
-    curTime - boothInfo[boothID].lastRefresh > REFRESH_TIME
+    curTime - boothInfo[boothID].lastRefresh > FIFTEEN_SECONDS_IN_MS
   ) {
     genNewQR(boothID, curTime).then(
       (newQR) => (boothInfo[boothID] = { lastRefresh: curTime, qr: newQR })

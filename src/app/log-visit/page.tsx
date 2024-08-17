@@ -23,18 +23,22 @@ export default function LogVisitPage(props: any) {
     }, [isValidHMAC, searchParams, setIsValidHMAC])
 
     useEffect(() => {
-        if (isValidHMAC === true && !hasBeenLogged) {
-            fetch(
-                '/api/log-booth?' +
+        const setFunction = () => {
+            if (isValidHMAC === true && !hasBeenLogged) {
+                fetch(
+                    '/api/log-booth?' +
                     new URLSearchParams({
                         boothid: boothID
                     }),
-                { method: 'GET' }
-            )
-                .then((resp) => resp.json())
-                .then(({ alreadyDone }) => setAlreadyDone(alreadyDone))
-            setHasBeenLogged(true)
+                    { method: 'GET' }
+                )
+                    .then((resp) => resp.json())
+                    .then(({ alreadyDone }) => setAlreadyDone(alreadyDone))
+                setHasBeenLogged(true)
+            }
         }
+        setFunction();
+
     }, [isValidHMAC, hasBeenLogged, boothID, setAlreadyDone, setHasBeenLogged])
 
     if (isValidHMAC === null) {

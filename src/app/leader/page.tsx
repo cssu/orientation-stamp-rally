@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { Button } from '@/components/ui/button'
 
 export default function LeaderPage() {
+    const TEN_SECONDS_IN_MS = 10 * 1000;
     const [allBooths, setAllBooths] = useState<any>(null)
     const [qrCode, setQRCode] = useState('')
     const [lastRefreshed, setLastRefreshed] = useState(Date.now())
@@ -15,10 +16,9 @@ export default function LeaderPage() {
     const websiteRoot = 'https://' + window.location.hostname
 
     useEffect(() => {
-        console.log('BOOTH ID: ' + boothID)
-        if (!boothID) return
         const handleInterval = () => {
             console.log('Booth ID: ' + boothID)
+            if(!boothID) return
             fetch(
                 '/api/leader?' +
                     new URLSearchParams({
@@ -30,8 +30,7 @@ export default function LeaderPage() {
             )
                 .then((resp) => {
                     try {
-                        const jsonified = resp.json()
-                        return jsonified
+                        return resp.json()
                     } catch (err) {}
                 })
                 .then(({ qr }) => {
@@ -40,9 +39,9 @@ export default function LeaderPage() {
                 })
                 .catch(console.error)
         }
-        const intervalId = setInterval(handleInterval, 1000)
-        return () => clearInterval(intervalId)
-    }, [boothID, setQRCode, setLastRefreshed])
+        handleInterval();
+        setTimeout(handleInterval, TEN_SECONDS_IN_MS)
+    }, [boothID, setQRCode, setLastRefreshed, TEN_SECONDS_IN_MS])
 
     useEffect(() => {
         if (!allBooths) {
