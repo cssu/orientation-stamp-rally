@@ -14,7 +14,7 @@ export default function ViewAccessedBooths() {
                 console.log(json)
                 return setAccessedBooths(json)
             })
-    }, [setAccessedBooths])
+    }, [])
 
     return (
         <div style={{ paddingLeft: '10vw' }}>

@@ -16,7 +16,7 @@ export default function Home() {
                 .then((resp) => resp.json())
                 .then((json) => setAccessedBooths(json))
         }
-    }, [accessedBooths, setAccessedBooths])
+    }, [accessedBooths])
 
     return (
         // <main className="flex min-h-screen flex-col items-center justify-between p-24">

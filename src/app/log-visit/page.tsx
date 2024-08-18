@@ -20,7 +20,7 @@ export default function LogVisitPage(props: any) {
                 .then((resp) => resp.json())
                 .then((json: any) => setIsValidHMAC(json.valid))
         }
-    }, [isValidHMAC, searchParams, setIsValidHMAC])
+    }, [isValidHMAC, searchParams])
 
     useEffect(() => {
         const setFunction = () => {
@@ -39,7 +39,7 @@ export default function LogVisitPage(props: any) {
         }
         setFunction();
 
-    }, [isValidHMAC, hasBeenLogged, boothID, setAlreadyDone, setHasBeenLogged])
+    }, [isValidHMAC, hasBeenLogged, boothID])
 
     if (isValidHMAC === null) {
         return (

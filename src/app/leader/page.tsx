@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
+import {QrReader} from 'react-qr-reader'
 import { Button } from '@/components/ui/button'
 
 export default function LeaderPage() {
-    const TEN_SECONDS_IN_MS = 10 * 1000;
+
     const [allBooths, setAllBooths] = useState<any>(null)
     const [qrCode, setQRCode] = useState('')
     const [lastRefreshed, setLastRefreshed] = useState(Date.now())
@@ -15,7 +16,9 @@ export default function LeaderPage() {
 
     const websiteRoot = 'https://' + window.location.hostname
 
+
     useEffect(() => {
+        const TEN_SECONDS_IN_MS = 10 * 1000;
         const handleInterval = () => {
             console.log('Booth ID: ' + boothID)
             if(!boothID) return
@@ -41,7 +44,7 @@ export default function LeaderPage() {
         }
         handleInterval();
         setTimeout(handleInterval, TEN_SECONDS_IN_MS)
-    }, [boothID, setQRCode, setLastRefreshed, TEN_SECONDS_IN_MS])
+    }, [boothID])
 
     useEffect(() => {
         if (!allBooths) {
@@ -49,7 +52,7 @@ export default function LeaderPage() {
                 .then((resp) => resp.json())
                 .then((json) => setAllBooths(json))
         }
-    }, [allBooths, setAllBooths])
+    }, [allBooths])
 
     if (boothID) {
         return (
