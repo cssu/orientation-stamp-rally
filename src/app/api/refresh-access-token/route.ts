@@ -1,9 +1,8 @@
 import { isRefreshTokenValid, refreshAccessToken } from '@/lib/auth'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function GET(req: NextRequest) {
-    const { searchParams } = new URL(req.url)
-    const refreshToken = searchParams.get('refreshToken')
+export async function POST(req: NextRequest) {
+    const refreshToken = req.cookies.get('refreshToken')?.value
 
     if (!refreshToken) {
         return NextResponse.json({ message: 'Invalid refresh token' }, { status: 401 })

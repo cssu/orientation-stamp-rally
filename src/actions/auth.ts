@@ -6,7 +6,11 @@ import { cookies, headers } from 'next/headers'
 import jwt from 'jsonwebtoken'
 import OTPFormSchema from '@/schemas/otpform'
 import { randomUUID, randomBytes } from 'crypto'
-import { OTP_EXPIRY_SECONDS } from '@/lib/constants'
+import {
+    JWT_EXPIRY,
+    JWT_EXPIRY_MILISECONDS,
+    OTP_EXPIRY_SECONDS
+} from '@/lib/constants'
 
 const MAX_SUPPORTED_SESSIONS = 4
 const MAX_OTP_ATTEMPTS = 3
@@ -23,7 +27,7 @@ type LoginResult = {
 
 function generateAcessToken(userId: string, email: string, role: string): string {
     return jwt.sign({ userId, email, role }, process.env.JWT_SECRET!, {
-        expiresIn: '15m'
+        expiresIn: JWT_EXPIRY
     })
 }
 
@@ -195,7 +199,7 @@ export async function login(email: string, otp: string): Promise<LoginResult> {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        expires: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
+        expires: new Date(Date.now() + JWT_EXPIRY_MILISECONDS)
     })
 
     cookies().set('refreshToken', refreshToken, {

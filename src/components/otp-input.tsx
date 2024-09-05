@@ -21,7 +21,8 @@ import { Button } from './ui/button'
 import authform from '@/actions/authform'
 import OTPFormSchema from '@/schemas/otpform'
 import { login } from '@/actions/auth'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
+import { OTP_EXPIRY_SECONDS } from '@/lib/constants'
 
 export default function OTPInput({
     initialTimeLeftSeconds,
@@ -94,7 +95,7 @@ export default function OTPInput({
         // Technically, we have to check if enough time has passed. But again,
         // unless someone intentionally modified the client-side code, this should
         // not be a problem.
-        startTimer(120)
+        startTimer(OTP_EXPIRY_SECONDS)
         setMaximumAttemptsReached(false)
     }
 
