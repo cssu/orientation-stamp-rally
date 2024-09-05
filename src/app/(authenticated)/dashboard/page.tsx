@@ -1,3 +1,5 @@
+'use client'
+
 import { buttonVariants } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
@@ -18,8 +20,11 @@ import {
     Trash2,
     Users2
 } from 'lucide-react'
+import useUser from '@/hooks/useUser'
 
 export default function Dashboard() {
+    const user = useUser()
+
     return (
         <TooltipProvider delayDuration={0}>
             <div className="flex grow items-stretch flex-row justify-betweenflex h-full p-4">
@@ -123,7 +128,7 @@ export default function Dashboard() {
                         <Separator />
                         <TabsContent value="all" className="m-0">
                             {/* <MailList items={mails} /> */}
-                            234234234243
+                            {JSON.stringify(user)}
                         </TabsContent>
                         <TabsContent value="unread" className="m-0">
                             {/* <MailList items={mails.filter((item) => !item.read)} /> */}

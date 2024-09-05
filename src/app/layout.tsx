@@ -6,7 +6,7 @@ import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
 import Animation from '@/components/animation'
 import { Toaster } from '@/components/ui/sonner'
-import { ThemeProvider } from '@/components/providers/themeprovider'
+import { ThemeProvider } from '@/components/providers/ThemeProvider'
 
 const inter = Inter({
     subsets: ['latin'],

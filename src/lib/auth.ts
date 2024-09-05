@@ -1,5 +1,6 @@
 import prisma from './prisma'
 import jwt from 'jsonwebtoken'
+import { JWT_EXPIRY } from './constants'
 
 export async function isRefreshTokenValid(refreshToken: string): Promise<boolean> {
     const refreshTokenObject = await prisma.refreshToken.findUnique({
@@ -9,7 +10,14 @@ export async function isRefreshTokenValid(refreshToken: string): Promise<boolean
 
     if (!refreshTokenObject) return false
 
-    return refreshTokenObject.expiresAt.getTime() > Date.now()
+    const isValid = refreshTokenObject.expiresAt.getTime() > Date.now()
+
+    // If refresh token is invalid, delete it from the database: this helps with cleanup, but it isn't necessary.
+    if (!isValid) {
+        await prisma.refreshToken.delete({ where: { token: refreshToken } })
+    }
+
+    return isValid
 }
 
 export async function refreshAccessToken(refreshToken: string): Promise<string | null> {
@@ -37,14 +45,8 @@ export async function refreshAccessToken(refreshToken: string): Promise<string |
                 role: storedToken.user.role
             },
             process.env.JWT_SECRET!,
-            { expiresIn: '15m' }
+            { expiresIn: JWT_EXPIRY }
         )
-
-        // Update the refresh token's expiry
-        await prisma.refreshToken.update({
-            where: { token: refreshToken },
-            data: { expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) } // 30 days from now
-        })
 
         return newAccessToken
     } catch (error) {

@@ -7,6 +7,7 @@ import redis from '@/lib/redis'
 import { cookies } from 'next/headers'
 import { randomUUID } from 'crypto'
 import { ALLOWED_DOMAINS, OTP_EXPIRY_SECONDS } from '@/lib/constants'
+import mail from '@/lib/mail'
 
 const THIRTY_DAYS_SECONDS = 30 * 24 * 60 * 60
 
@@ -20,17 +21,17 @@ type Message = {
 }
 
 async function sendOtp(email: string, otp: string) {
-    // await mailersend.email.send(
-    //     new EmailParams()
-    //         .setFrom(cssuEmail)
-    //         .setTo([new Recipient(email, 'Orientation Attendee')])
-    //         .setReplyTo(cssuEmail)
-    //         .setSubject('Your OTP for CSSU Orientation Portal').setHtml(`
-    //         <p>Your OTP for the CSSU Orientation Portal is:</p>
-    //         <h1>${otp}</h1>
-    //         <p>This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.</p>
-    //     `)
-    // )
+    mail.sendMail({
+        from: 'CSSU <cssu@vm004>',
+        to: email,
+        subject: 'Your OTP for CSSU Orientation Portal',
+        text: `Your OTP for the CSSU Orientation Portal is: ${otp}. This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.`,
+        html: `
+        <p>Your OTP for the CSSU Orientation Portal is:</p>
+        <h1>${otp}</h1>
+        <p>This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.</p>
+        `
+    })
 }
 
 async function generateOTP(email: string): Promise<Message> {

@@ -53,5 +53,6 @@ model ExemptedEmail {
 enum UserRole {
   participant
   reward_issuer
+  leader
   admin
 }
