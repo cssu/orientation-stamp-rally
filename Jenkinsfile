@@ -12,12 +12,13 @@ pipeline {
             steps {
                 script {
                     withCredentials([
-                        string(credentialsId: '6a92ef53-8130-4dd8-968f-12600d877ec4', variable: 'POSTGRES_PASSWORD'),
-                        string(credentialsId: '81758b43-11de-4075-a725-9157d2ea11bf', variable: 'JWT_SECRET')
+                        string(credentialsId: '60850337-55a7-4857-a176-1f434d4cf8b5', variable: 'POSTGRES_PASSWORD'),
+                        string(credentialsId: 'fc04f487-0afc-45fe-bfa2-b9348a6bf813', variable: 'JWT_SECRET')
                     ]) {
                 def envContent = """
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 JWT_SECRET=${JWT_SECRET}
+URL=https://orientation.cssu.ca
 """
                         writeFile file: '.env', text: envContent.trim()
                     }

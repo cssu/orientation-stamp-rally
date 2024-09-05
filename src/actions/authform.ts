@@ -6,10 +6,9 @@ import FormSchema from '@/schemas/loginform'
 import redis from '@/lib/redis'
 import { cookies } from 'next/headers'
 import { randomUUID } from 'crypto'
+import { ALLOWED_DOMAINS, OTP_EXPIRY_SECONDS } from '@/lib/constants'
 
 const THIRTY_DAYS_SECONDS = 30 * 24 * 60 * 60
-
-const ALLOWED_DOMAINS = new Set(['mail.utoronto.ca', 'utoronto.ca', 'cdf.utoronto.ca'])
 
 type Message = {
     success: boolean
@@ -20,26 +19,54 @@ type Message = {
     timeLeftSeconds?: number
 }
 
+async function sendOtp(email: string, otp: string) {
+    // await mailersend.email.send(
+    //     new EmailParams()
+    //         .setFrom(cssuEmail)
+    //         .setTo([new Recipient(email, 'Orientation Attendee')])
+    //         .setReplyTo(cssuEmail)
+    //         .setSubject('Your OTP for CSSU Orientation Portal').setHtml(`
+    //         <p>Your OTP for the CSSU Orientation Portal is:</p>
+    //         <h1>${otp}</h1>
+    //         <p>This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.</p>
+    //     `)
+    // )
+}
+
 async function generateOTP(email: string): Promise<Message> {
     const lastGenerated = await redis.ephemeral.get(`${email}:lastGenerated`)
     if (lastGenerated) {
         return {
             success: true,
             otpGenerated: false,
-            timeLeftSeconds: Math.ceil(120 - (Date.now() / 1000 - parseInt(lastGenerated))),
+            timeLeftSeconds: Math.ceil(
+                OTP_EXPIRY_SECONDS - (Date.now() / 1000 - parseInt(lastGenerated))
+            ),
             maximumAttemptsReached: (await redis.ephemeral.get(`${email}:attempts`)) === '3'
         }
     }
 
     // const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
-    // console.log(generatedOTP)
     const generatedOTP = '111111'
 
     // 2 Minute expiry
     const unixSeconds = Date.now() / 1000
-    await redis.ephemeral.set(`${email}:otp`, generatedOTP, 'EX', 2 * 60)
-    await redis.ephemeral.set(`${email}:lastGenerated`, unixSeconds, 'EX', 2 * 60)
-    await redis.ephemeral.set(`${email}:attempts`, 0, 'EX', 2 * 60)
+    await redis.ephemeral.set(`${email}:otp`, generatedOTP, 'EX', OTP_EXPIRY_SECONDS)
+    await redis.ephemeral.set(`${email}:lastGenerated`, unixSeconds, 'EX', OTP_EXPIRY_SECONDS)
+    await redis.ephemeral.set(`${email}:attempts`, 0, 'EX', OTP_EXPIRY_SECONDS)
+
+    await sendOtp(email, generatedOTP).catch((error) => {
+        console.error('Error sending OTP:', error)
+        return {
+            success: false,
+            otpGenerated: false,
+            toastMessage: {
+                short: 'Error sending OTP',
+                description:
+                    'An error occurred while sending the OTP. Contact CSSU or try again later.'
+            }
+        }
+    })
 
     return {
         success: true,
@@ -89,7 +116,6 @@ async function validateFormData(data: z.infer<typeof FormSchema>): Promise<Messa
 
 export default async function authform(data: z.infer<typeof FormSchema>): Promise<Message> {
     data.email = data.email.toLowerCase()
-    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     const emailValidation = await validateFormData(data)
     if (!emailValidation.success) {

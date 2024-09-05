@@ -21,6 +21,7 @@ import { Button } from './ui/button'
 import authform from '@/actions/authform'
 import OTPFormSchema from '@/schemas/otpform'
 import { login } from '@/actions/auth'
+import { useRouter } from 'next/router'
 
 export default function OTPInput({
     initialTimeLeftSeconds,
@@ -38,6 +39,8 @@ export default function OTPInput({
         useState<boolean>(initialMaxAttemptsReached)
 
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+    const router = useRouter()
 
     const otpForm = useForm<z.infer<typeof OTPFormSchema>>({
         resolver: zodResolver(OTPFormSchema),
@@ -124,6 +127,8 @@ export default function OTPInput({
         })
 
         setFinalLoading(false)
+
+        router.push('/dashboard')
     }
 
     useEffect(() => {

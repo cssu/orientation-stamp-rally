@@ -6,6 +6,7 @@ import { cookies, headers } from 'next/headers'
 import jwt from 'jsonwebtoken'
 import OTPFormSchema from '@/schemas/otpform'
 import { randomUUID, randomBytes } from 'crypto'
+import { OTP_EXPIRY_SECONDS } from '@/lib/constants'
 
 const MAX_SUPPORTED_SESSIONS = 4
 const MAX_OTP_ATTEMPTS = 3
@@ -31,7 +32,7 @@ function generateRefreshToken(): string {
 }
 
 function getTimeLeftSeconds(lastGenerated: number): number {
-    return Math.ceil(120 - (Date.now() / 1000 - lastGenerated))
+    return Math.ceil(OTP_EXPIRY_SECONDS - (Date.now() / 1000 - lastGenerated))
 }
 
 export async function login(email: string, otp: string): Promise<LoginResult> {
@@ -69,7 +70,7 @@ export async function login(email: string, otp: string): Promise<LoginResult> {
             toastMessage: {
                 short: 'Too Many Attempts',
                 description: `You have exceeded the maximum number of attempts. Please request a new OTP in ${
-                    lastGenerated ? getTimeLeftSeconds(parseInt(lastGenerated)) : 120
+                    lastGenerated ? getTimeLeftSeconds(parseInt(lastGenerated)) : OTP_EXPIRY_SECONDS
                 } seconds.`
             },
             formMessage: 'Too many attempts. Please request a new OTP.'
@@ -87,28 +88,6 @@ export async function login(email: string, otp: string): Promise<LoginResult> {
         }
     }
 
-    // The block below is not required because we already check if the OTP is null above.
-    // If OTP is null, it means parseInt(attempts) >= MAX_OTP_ATTEMPTS already, as handled
-    // by the second block down below.
-    //
-    //
-    // if (parseInt(attempts) >= MAX_OTP_ATTEMPTS) {
-    //     const lastGenerated = await redis.ephemeral.get(`${email}:lastGenerated`)
-    //     return {
-    //         success: false,
-    //         maximumAttemptsReached: true,
-    //         toastMessage: {
-    //             short: 'Too Many Attempts',
-    //             description: `You have exceeded the maximum number of attempts. Please request a new OTP in ${
-    //                 lastGenerated ? getTimeLeftSeconds(parseInt(lastGenerated)) : 120
-    //             } seconds.`
-    //         },
-    //         formMessage: 'Too many attempts. Please request a new OTP.'
-    //     }
-    // }
-    //
-    //
-
     if (storedOtp !== otp) {
         const incremented = await redis.ephemeral.incr(`${email}:attempts`)
         if (incremented === MAX_OTP_ATTEMPTS) {
@@ -123,7 +102,9 @@ export async function login(email: string, otp: string): Promise<LoginResult> {
                 toastMessage: {
                     short: 'Too Many Attempts',
                     description: `You have exceeded the maximum number of attempts. Please request a new OTP in ${
-                        lastGenerated ? getTimeLeftSeconds(parseInt(lastGenerated)) : 120
+                        lastGenerated
+                            ? getTimeLeftSeconds(parseInt(lastGenerated))
+                            : OTP_EXPIRY_SECONDS
                     } seconds.`
                 }
             }
@@ -162,8 +143,8 @@ export async function login(email: string, otp: string): Promise<LoginResult> {
     const accessToken = generateAcessToken(user.userId, user.email, user.role)
     const refreshToken = generateRefreshToken()
 
-    const userAgent = headers().get('User-Agent')
-    const platform = headers().get('Sec-Ch-Ua-Platform')
+    const userAgent = headers().get('User-Agent') || 'unknown'
+    const platform = headers().get('Sec-Ch-Ua-Platform') || 'unknown'
 
     await prisma.$transaction(async (tx) => {
         // Check if a refresh token for this device already exists
@@ -213,13 +194,15 @@ export async function login(email: string, otp: string): Promise<LoginResult> {
     cookies().set('accessToken', accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
+        sameSite: 'strict',
+        expires: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
     })
 
     cookies().set('refreshToken', refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
+        sameSite: 'strict',
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
     })
 
     return {
