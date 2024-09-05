@@ -30,11 +30,12 @@ import FormSchema from '@/schemas/loginform'
 import { LoadingSpinner } from './ui/spinner'
 import { useState } from 'react'
 import OTPInput from './otp-input'
+import { OTP_EXPIRY_SECONDS } from '@/lib/constants'
 
 export default function Login() {
     const [loading, setLoading] = useState<boolean>(false)
     const [atOtpStep, setAtOtpStep] = useState<boolean>(false)
-    const [timeLeftSeconds, setTimeLeftSeconds] = useState<number>(120)
+    const [timeLeftSeconds, setTimeLeftSeconds] = useState<number>(OTP_EXPIRY_SECONDS)
     const [validatedEmail, setValidatedEmail] = useState<string>('')
     const [maximumAttemptsReached, setMaximumAttemptsReached] = useState<boolean>(false)
 
