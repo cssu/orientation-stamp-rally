@@ -36,6 +36,13 @@ URL=https://orientation.cssu.ca
             steps {
                 script {
                     sh 'docker compose up -d'
+
+                    sh '''
+                    until [ "`docker inspect -f {{.State.Running}} orientation-app`" == "true" ]; do
+                        sleep 0.1;
+                    done;
+                    '''
+
                     sh 'docker compose exec orientation-app yarn prisma migrate deploy'
                 }
             }
