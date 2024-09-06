@@ -22,7 +22,7 @@ type Message = {
 
 async function sendOtp(email: string, otp: string) {
     mail.sendMail({
-        from: 'CSSU <cssu@vm004>',
+        from: 'CSSU <cssu.ca>',
         to: email,
         subject: 'Your OTP for CSSU Orientation Portal',
         text: `Your OTP for the CSSU Orientation Portal is: ${otp}. This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.`,
@@ -47,8 +47,7 @@ async function generateOTP(email: string): Promise<Message> {
         }
     }
 
-    // const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
-    const generatedOTP = '111111'
+    const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
 
     // 2 Minute expiry
     const unixSeconds = Date.now() / 1000
