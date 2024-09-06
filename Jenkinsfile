@@ -35,13 +35,7 @@ URL=https://orientation.cssu.ca
         stage('Deploy and Migrate') {
             steps {
                 script {
-                    sh 'docker compose up -d'
-
-                    sh '''#!/bin/bash
-                    until [ "`docker inspect -f {{.State.Health.Status}} orientation-app`"=="healthy" ]; do
-                        sleep 5;
-                    done;
-                    '''
+                    sh 'docker compose up -d --wait'
 
                     sh 'docker compose exec orientation-app yarn prisma migrate deploy'
                     sh 'docker compose exec orientation-app yarn prisma db seed'
