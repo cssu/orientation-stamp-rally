@@ -20,6 +20,7 @@ export default function Dashboard() {
     const accessToken = cookies().get('accessToken')!.value
 
     const decoded = jwt.decode(accessToken) as DecodedJwt
+    decoded.role = 'participant' // TEMPORARY!!! TODO
 
     return (
         <TooltipProvider>
