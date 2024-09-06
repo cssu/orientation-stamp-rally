@@ -55,7 +55,6 @@ URL=https://orientation.cssu.ca
                           summary: 'The build failed',
                           text: 'One or more stages failed. Docker compose was shut down.',
                           conclusion: 'FAILURE'
-            sh 'docker compose down'
         }
     }
 }
