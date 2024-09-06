@@ -21,6 +21,11 @@ type Message = {
 }
 
 async function sendOtp(email: string, otp: string) {
+    if (process.env.NODE_ENV === 'development') {
+        console.log(`Generated OTP for ${email}: ${otp}`)
+        return
+    }
+
     mail.sendMail({
         from: 'CSSU <cssu@vm004>',
         to: email,
@@ -47,8 +52,7 @@ async function generateOTP(email: string): Promise<Message> {
         }
     }
 
-    // const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
-    const generatedOTP = '111111'
+    const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
 
     // 2 Minute expiry
     const unixSeconds = Date.now() / 1000
