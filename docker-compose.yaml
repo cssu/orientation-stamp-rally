@@ -25,6 +25,8 @@ services:
         volumes:
             - /etc/localtime:/etc/localtime:ro
             - /etc/timezone:/etc/timezone:ro
+        env_file:
+            - .env
         environment:
             - DATABASE_URL=postgresql://orientation:${POSTGRES_PASSWORD}@postgres:5432
         networks:

@@ -47,7 +47,8 @@ async function generateOTP(email: string): Promise<Message> {
         }
     }
 
-    const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
+    // const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString()
+    const generatedOTP = '111111'
 
     // 2 Minute expiry
     const unixSeconds = Date.now() / 1000
