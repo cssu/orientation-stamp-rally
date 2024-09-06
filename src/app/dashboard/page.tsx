@@ -8,6 +8,8 @@ import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import prisma from '@/lib/prisma'
 import { type UserRole } from '@prisma/client'
+import { redirect } from 'next/navigation'
+import { refreshAccessToken } from '@/lib/auth'
 
 type DecodedJwt = {
     userId: string
@@ -15,9 +17,22 @@ type DecodedJwt = {
     role: UserRole
 }
 
-export default function Dashboard() {
-    // Why the cookie must be present: This is ensured by the middleware
-    const accessToken = cookies().get('accessToken')!.value
+export default async function Dashboard() {
+    // Why the cookie must be present: This is ensured by the middleware. However,
+    // The cookie might expire in the meantime.
+    let accessToken = cookies().get('accessToken')?.value
+    if (!accessToken) {
+        const refreshToken = cookies().get('refreshToken')?.value
+        if (!refreshToken) {
+            redirect('/')
+        }
+
+        const newAt = await refreshAccessToken(refreshToken)
+        if (!newAt) {
+            redirect('/')
+        }
+        accessToken = newAt
+    }
 
     const decoded = jwt.decode(accessToken) as DecodedJwt
     decoded.role = 'participant' // TEMPORARY!!! TODO

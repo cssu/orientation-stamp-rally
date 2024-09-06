@@ -27,7 +27,6 @@ export async function middleware(request: NextRequest) {
         })
             .then((res) => res.json())
             .then((data) => data.accessToken)
-
         if (newAccessToken) {
             const response = NextResponse.next()
             response.cookies.set('accessToken', newAccessToken, {
