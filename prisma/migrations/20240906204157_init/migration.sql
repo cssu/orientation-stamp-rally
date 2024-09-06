@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('participant', 'reward_issuer', 'admin');
+CREATE TYPE "UserRole" AS ENUM ('participant', 'club_representative', 'admin');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -36,6 +36,26 @@ CREATE TABLE "Organization" (
 );
 
 -- CreateTable
+CREATE TABLE "Booth" (
+    "boothId" VARCHAR(2) NOT NULL,
+    "organizationId" UUID NOT NULL,
+    "description" VARCHAR(255),
+
+    CONSTRAINT "Booth_pkey" PRIMARY KEY ("boothId")
+);
+
+-- CreateTable
+CREATE TABLE "Stamp" (
+    "stampId" UUID NOT NULL,
+    "description" TEXT,
+    "issuedAt" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" UUID NOT NULL,
+    "boothId" VARCHAR(2) NOT NULL,
+
+    CONSTRAINT "Stamp_pkey" PRIMARY KEY ("stampId")
+);
+
+-- CreateTable
 CREATE TABLE "ExemptedEmail" (
     "email" VARCHAR(100) NOT NULL,
     "reason" VARCHAR(255) NOT NULL,
@@ -58,3 +78,12 @@ ALTER TABLE "User" ADD CONSTRAINT "User_organizationId_fkey" FOREIGN KEY ("organ
 
 -- AddForeignKey
 ALTER TABLE "RefreshToken" ADD CONSTRAINT "RefreshToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Booth" ADD CONSTRAINT "Booth_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("organizationId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Stamp" ADD CONSTRAINT "Stamp_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Stamp" ADD CONSTRAINT "Stamp_boothId_fkey" FOREIGN KEY ("boothId") REFERENCES "Booth"("boothId") ON DELETE RESTRICT ON UPDATE CASCADE;

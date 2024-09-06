@@ -4,7 +4,7 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl"] // This is required for alpine based docker images
 }
 
@@ -21,6 +21,7 @@ model User {
   organization Organization? @relation(fields: [organizationId], references: [organizationId])
 
   refreshTokens RefreshToken[]
+  stamps        Stamp[]
 }
 
 model RefreshToken {
@@ -41,7 +42,28 @@ model Organization {
   name           String   @db.VarChar(100)
   createdAt      DateTime @default(now()) @db.Timestamp(0)
 
-  users User[]
+  booths Booth[]
+  User   User[]
+}
+
+model Booth {
+  boothId        String  @id @db.VarChar(2)
+  organizationId String  @db.Uuid
+  description    String? @db.VarChar(255)
+
+  organization Organization @relation(fields: [organizationId], references: [organizationId])
+  stamps       Stamp[]
+}
+
+model Stamp {
+  stampId     String   @id @default(uuid()) @db.Uuid
+  description String?  @db.Text
+  issuedAt    DateTime @default(now()) @db.Timestamp(0)
+  userId      String   @db.Uuid
+  boothId     String   @db.VarChar(2)
+
+  user  User  @relation(fields: [userId], references: [userId])
+  booth Booth @relation(fields: [boothId], references: [boothId])
 }
 
 model ExemptedEmail {
@@ -52,7 +74,6 @@ model ExemptedEmail {
 
 enum UserRole {
   participant
-  reward_issuer
-  leader
+  club_representative
   admin
 }
