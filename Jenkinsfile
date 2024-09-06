@@ -39,7 +39,7 @@ URL=https://orientation.cssu.ca
 
                     sh '''#!/bin/bash
                     until [ "`docker inspect -f {{.State.Health.Status}} orientation-app`"=="healthy" ]; do
-                        sleep 0.1;
+                        sleep 1;
                     done;
                     '''
 
