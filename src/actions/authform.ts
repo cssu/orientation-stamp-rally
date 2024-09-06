@@ -22,7 +22,7 @@ type Message = {
 
 async function sendOtp(email: string, otp: string) {
     mail.sendMail({
-        from: 'CSSU <orientation@cssu.ca>',
+        from: 'CSSU <cssu@vm004>',
         to: email,
         subject: 'Your OTP for CSSU Orientation Portal',
         text: `Your OTP for the CSSU Orientation Portal is: ${otp}. This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.`,
