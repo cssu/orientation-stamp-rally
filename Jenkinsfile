@@ -38,7 +38,7 @@ URL=https://orientation.cssu.ca
                     sh 'docker compose up -d'
 
                     sh '''#!/bin/bash
-                    until [ "`docker inspect -f {{.State.Health.Status}} CONTAINERNAME`"=="healthy" ]; do
+                    until [ "`docker inspect -f {{.State.Health.Status}} orientation-app`"=="healthy" ]; do
                         sleep 0.1;
                     done;
                     '''
