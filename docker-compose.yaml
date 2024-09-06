@@ -13,25 +13,25 @@ networks:
         driver: bridge
 
 services:
-    migrations:
-        build:
-            context: ./prisma
-            dockerfile: Dockerfile
-        container_name: migrations-orientation
-        tty: true
-        depends_on:
-            postgres:
-                condition: service_healthy
-        volumes:
-            - /etc/localtime:/etc/localtime:ro
-            - /etc/timezone:/etc/timezone:ro
-        env_file:
-            - .env
-        environment:
-            - DATABASE_URL=postgresql://orientation:${POSTGRES_PASSWORD}@postgres:5432
-        networks:
-            - orientation
-        <<: *logging
+    # migrations:
+    #     build:
+    #         context: ./prisma
+    #         dockerfile: Dockerfile
+    #     container_name: migrations-orientation
+    #     tty: true
+    #     depends_on:
+    #         postgres:
+    #             condition: service_healthy
+    #     volumes:
+    #         - /etc/localtime:/etc/localtime:ro
+    #         - /etc/timezone:/etc/timezone:ro
+    #     env_file:
+    #         - .env
+    #     environment:
+    #         - DATABASE_URL=postgresql://orientation:${POSTGRES_PASSWORD}@postgres:5432
+    #     networks:
+    #         - orientation
+    #     <<: *logging
 
     orientation_app:
         build:
