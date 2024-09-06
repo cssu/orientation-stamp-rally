@@ -55,18 +55,20 @@ export default function LeaderPage() {
     if (boothID) {
         return (
             <>
-                <div style={{ alignSelf: 'center' }}>
+                <div style={{ alignSelf: 'center', maxWidth: '80vw' }}>
                     <div>
-                        <h1>
+                        <h1 style={{ textAlign: 'center' }}>
                             Current QR code (for booth ID <b>{boothID}</b>):
                         </h1>
                         <br />
                         {qrCode ? (
-                            <QRCodeSVG
-                                value={`${websiteRoot}/log-visit?qr=${qrCode}`}
-                                width={400}
-                                height={400}
-                            />
+                            <center>
+                                <QRCodeSVG
+                                    value={`${websiteRoot}/log-visit?qr=${qrCode}`}
+                                    width="100%"
+                                    height="100%"
+                                />
+                            </center>
                         ) : (
                             <p style={{ fontSize: 36 }}>
                                 <b>
@@ -77,17 +79,9 @@ export default function LeaderPage() {
                     </div>
                 </div>
                 <br />
-                <h1 style={{ alignSelf: 'center' }}>
-                    (access link of QR code{' '}
-                    <a
-                        href={`${websiteRoot}/log-visit?qr=${qrCode}`}
-                        style={{ textDecoration: 'underline' }}
-                    >
-                        here
-                    </a>
-                    )
-                </h1>
-                <h1 style={{ alignSelf: 'center' }}>(QR: {qrCode})</h1>
+                <Button className="bg-slate-800" style={{ alignSelf: 'center' }}>
+                    <a href="/leader">← Back</a>
+                </Button>
             </>
         )
     } else {
@@ -107,8 +101,13 @@ export default function LeaderPage() {
                         {allBooths.map((booth: any, index: any) => (
                             <Button
                                 size={'lg'}
-                                className="text-xl"
-                                style={{ height: 70 }}
+                                style={{
+                                    height: '70px',
+                                    fontSize:
+                                        'calc(12px + (26 - 12) * ((17vw - 60px) / (300 - 60)))',
+                                    lineHeight: 1,
+                                    textWrap: 'wrap'
+                                }}
                                 onClick={() => setBoothID(booth)}
                                 key={index}
                             >
