@@ -37,8 +37,8 @@ URL=https://orientation.cssu.ca
                 script {
                     sh 'docker compose up -d --wait'
 
-                    sh 'docker compose exec orientation-app yarn prisma migrate deploy'
-                    sh 'docker compose exec orientation-app yarn prisma db seed'
+                    sh 'npx --yes prisma migrate deploy'
+                    sh 'npx --yes prisma db seed'
                 }
             }
         }
