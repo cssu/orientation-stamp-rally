@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ valid: false, message: 'Missing boothId' })
     }
 
-    const redisData = await redis.ephemeral.get(`qr:${payload}`)
+    const redisData = await redis.ephemeral.get(`qr:${boothId}`)
 
     if (!redisData) {
         return NextResponse.json({ valid: false, message: 'QR code not found' })
