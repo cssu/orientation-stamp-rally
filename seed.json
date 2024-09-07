@@ -83,7 +83,14 @@
             "club": "UofT Blueprint",
             "booth": "B9",
             "logo": "uoftblueprint.jpeg"
+        },
+        {
+            "email": "dummy@mail.utoronto.ca",
+            "club": "Test Stamp Issuers",
+            "booth": "NA",
+            "logo": "helloworld.png"
         }
+
     ],
-    "admins": ["gabriel.thompson@mail.utoronto.ca", "j.barahan@mail.utoronto.ca"]
+    "admins": ["baris.bayazit@mail.utoronto.ca", "gabriel.thompson@mail.utoronto.ca", "j.barahan@mail.utoronto.ca"]
 }

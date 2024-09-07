@@ -76,7 +76,6 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
             })
 
             const boothId = org!.organization?.booths[0]!.boothId!
-            const websiteRoot = process.env.URL!
 
             return (
                 <div>
@@ -92,18 +91,36 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                     </TabsContent> */}
                 </div>
             )
+        case 'admin':
+            return (
+                <div>
+                    <Separator />
+                    <TabsContent value="home" className="m-0">
+                        <DashboardHome {...decoded} />
+                    </TabsContent>
+                    <TabsContent value="stats" className="m-0">
+                        <p>App Statistics not complete yet!</p>
+                    </TabsContent>
+                    <TabsContent value="teststamp" className="m-0">
+                        <DashboardBooths boothId="NA" />
+                    </TabsContent>
+                </div>
+            )
         default:
             return null
     }
 }
 
 async function DashboardHome({ userId, email, role }: DecodedJwt) {
-    const [nBoothsVisited, remainingBooths] = await prisma.$transaction([
+    const res = await prisma.$transaction([
         prisma.stamp.count({
             where: { userId }
         }),
         prisma.booth.count()
     ])
+
+    const nBoothsVisited = res[0] - 1
+    const remainingBooths = res[1] - nBoothsVisited
 
     switch (role) {
         case 'participant':
