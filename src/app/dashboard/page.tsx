@@ -79,9 +79,8 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                 }
             })
 
+            // TODO: Right now, every organization has only one booth. This may change in the future.
             const boothId = org!.organization?.booths[0]!.boothId!
-            const websiteRoot = process.env.URL!
-
             return (
                 <div>
                     <Separator />
@@ -93,12 +92,19 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                     </TabsContent>
                 </div>
             )
-        default:
-            return null
+        case 'admin':
+            return (
+                <div>
+                    <Separator />
+                    <TabsContent value="home" className="m-0">
+                        <DashboardHome {...decoded} />
+                    </TabsContent>
+                </div>
+            )
     }
 }
 
-async function DashboardHome({ userId, email, role }: DecodedJwt) {
+async function DashboardHome({ userId, role }: DecodedJwt) {
     const [nBoothsVisited, remainingBooths] = await prisma.$transaction([
         prisma.stamp.count({
             where: { userId }
@@ -106,35 +112,48 @@ async function DashboardHome({ userId, email, role }: DecodedJwt) {
         prisma.booth.count()
     ])
 
-    if (role == 'participant') {
-        return (
-            <div className="p-8">
-                <h1 className="text-4xl font-extrabold">Welcome to CSSU Orientation!</h1>
-                <br />
-                <p className="text-xl font-medium">
-                    {remainingBooths == 0
-                        ? 'Congratulations! You have collected all stamps.'
-                        : `You have visited ${nBoothsVisited} booths. You can still visit ${remainingBooths} booths!`}
-                </p>
-                <br />
-                <h2 className="text-3xl font-semibold">How it Works:</h2>
-                <p className="text-lg">
-                    Visit each club booths and scan the QR code within 10 seconds to get a stamp.
-                    Once
-                    {'more details here'}
-                </p>
-            </div>
-        )
-    } else if (role == 'club_representative') {
-        return (
-            <div className="p-8">
-                <h1 className="text-4xl font-extrabold">Welcome to CSSU Orientation!</h1>
-                <br />
-                <p className="text-xl font-medium">
-                    To open the QR code for your booth, click on the booths tab.
-                </p>
-            </div>
-        )
+    switch (role) {
+        case 'participant':
+            return (
+                <div className="p-8">
+                    <h1 className="text-4xl font-extrabold">Welcome to CSSU Orientation!</h1>
+                    <br />
+                    <p className="text-xl font-medium">
+                        {remainingBooths == 0
+                            ? 'Congratulations! You have collected all stamps.'
+                            : `You have visited ${nBoothsVisited} booths. You can still visit ${remainingBooths} booths!`}
+                    </p>
+                    <br />
+                    <h2 className="text-3xl font-semibold">How it Works:</h2>
+                    <p className="text-lg">
+                        Visit each club booths and scan the QR code within 10 seconds to get a
+                        stamp. Once
+                        {'more details here'}
+                    </p>
+                </div>
+            )
+        case 'club_representative':
+            return (
+                <div className="p-8">
+                    <h1 className="text-4xl font-extrabold">Welcome to CSSU Orientation!</h1>
+                    <br />
+                    <p className="text-xl font-medium">
+                        To open the QR code for your booth, click on the booths tab.
+                    </p>
+                </div>
+            )
+        case 'admin':
+            return (
+                <div className="p-8">
+                    <h1 className="text-4xl font-extrabold">
+                        Welcome to CSSU Orientation, Mr. Admin 😎!
+                    </h1>
+                    <br />
+                    <p className="text-xl font-medium">
+                        As an admin, you have access to all the features of the dashboard.
+                    </p>
+                </div>
+            )
     }
 
     return null
