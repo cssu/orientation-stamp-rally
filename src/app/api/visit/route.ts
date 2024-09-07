@@ -13,9 +13,14 @@ type DecodedJwt = {
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const payload = searchParams.get('qr')
+    const boothId = searchParams.get('boothId')
 
     if (!payload) {
         return NextResponse.json({ valid: false, message: 'Missing payload' })
+    }
+
+    if (!boothId) {
+        return NextResponse.json({ valid: false, message: 'Missing boothId' })
     }
 
     const redisData = await redis.ephemeral.get(`qr:${payload}`)
@@ -24,7 +29,13 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ valid: false, message: 'QR code not found' })
     }
 
-    const { timestamp, boothId } = JSON.parse(redisData)
+    const { actualPayloadEncoded, timestamp } = JSON.parse(redisData)
+
+    const actualPayload = decodeURIComponent(actualPayloadEncoded)
+
+    if (actualPayload != payload) {
+        return NextResponse.json({ valid: false, message: 'Invalid QR code' })
+    }
 
     const currentTime = new Date().getTime()
     const qrGenerationTime = new Date(timestamp).getTime()
@@ -47,8 +58,7 @@ export async function GET(req: NextRequest) {
             },
             booth: {
                 connect: { boothId: boothId }
-            },
-            boothId: boothId
+            }
         }
     })
 
