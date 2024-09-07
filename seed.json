@@ -1,0 +1,80 @@
+{
+    "clubs": [
+        {
+            "email": "ieeeutstudentbranch@gmail.com",
+            "club": "IEEE UofT",
+            "booth": "A1"
+        },
+        {
+            "email": "ricky.wen@mail.utoronto.ca",
+            "club": "UTGDDC",
+            "booth": "A2"
+        },
+        {
+            "email": "yuxuan.seah@mail.utoronto.ca",
+            "club": "UTOSS",
+            "booth": "A3"
+        },
+        {
+            "email": "wicsuoft@gmail.com",
+            "club": "UofT WiCS",
+            "booth": "A4"
+        },
+        {
+            "email": "uoft.esports@gmail.com",
+            "club": "UofT Esports",
+            "booth": "A5"
+        },
+        {
+            "email": "yushu.wang@mail.utoronto.ca",
+            "club": "UTASR",
+            "booth": "B1"
+        },
+        {
+            "email": "angeladeng423@gmail.com",
+            "club": "UoftHacks",
+            "booth": "B2"
+        },
+        {
+            "email": "mail@uoftctf.org",
+            "club": "UofTCTF",
+            "booth": "B3"
+        },
+        {
+            "email": "colleenchangxy@gmail.com",
+            "club": "GDSC",
+            "booth": "B4"
+        },
+        {
+            "email": "illuminaiteacademy@gmail.com",
+            "club": "illuminaite UofT",
+            "booth": "B5"
+        },
+        {
+            "email": "emily.mamcarz@mail.utoronto.ca",
+            "club": "CSSA (Cybersecurity Student Association)",
+            "booth": "B6"
+        },
+        {
+            "email": "utorontomist@gmail.com",
+            "club": "UTMIST",
+            "booth": "B7"
+        },
+        {
+            "email": "mail2devshah@gmail.com",
+            "club": "UofT AI",
+            "booth": "B8"
+        },
+        {
+            "email": "contact@uoftblueprint.org",
+            "club": "UofT Blueprint",
+            "booth": "B9"
+        },
+        {
+            "email": "baris.bayazit@mail.utoronto.ca",
+            "club": "UofT Compilers",
+            "booth": "B10"
+        }
+    ],
+    "admins": ["gabriel.thompson@mail.utoronto.ca", "j.barahan@mail.utoronto.ca"]
+}

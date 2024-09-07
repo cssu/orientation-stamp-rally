@@ -1,6 +1,6 @@
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Separator } from '@radix-ui/react-dropdown-menu'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
+import { Tabs, TabsContent } from '@radix-ui/react-tabs'
 
 import DashboardNav from '@/components/DashboardNav'
 
@@ -10,6 +10,7 @@ import prisma from '@/lib/prisma'
 import { type UserRole } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { refreshAccessToken } from '@/lib/auth'
+import DashboardBooths from './booths'
 
 type DecodedJwt = {
     userId: string
@@ -35,7 +36,6 @@ export default async function Dashboard() {
     }
 
     const decoded = jwt.decode(accessToken) as DecodedJwt
-    decoded.role = 'participant' // TEMPORARY!!! TODO
 
     return (
         <TooltipProvider>
@@ -52,7 +52,7 @@ export default async function Dashboard() {
     )
 }
 
-function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
+async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
     switch (decoded.role) {
         case 'participant':
             return (
@@ -62,11 +62,25 @@ function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                         <DashboardHome {...decoded} />
                     </TabsContent>
                     <TabsContent value="stamps" className="m-0">
-                        342432423
+                        <DashboardStamps {...decoded} />
                     </TabsContent>
                 </div>
             )
         case 'club_representative':
+            const org = await prisma.user.findUnique({
+                where: { userId: decoded.userId },
+                select: {
+                    organization: {
+                        select: {
+                            booths: true
+                        }
+                    }
+                }
+            })
+
+            const boothId = org!.organization?.booths[0]!.boothId!
+            const websiteRoot = process.env.URL!
+
             return (
                 <div>
                     <Separator />
@@ -74,7 +88,7 @@ function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                         <DashboardHome {...decoded} />
                     </TabsContent>
                     <TabsContent value="booths" className="m-0">
-                        342432423
+                        <DashboardBooths boothId={boothId} />
                     </TabsContent>
                 </div>
             )
@@ -110,7 +124,44 @@ async function DashboardHome({ userId, email, role }: DecodedJwt) {
                 </p>
             </div>
         )
+    } else if (role == 'club_representative') {
+        return (
+            <div className="p-8">
+                <h1 className="text-4xl font-extrabold">Welcome to CSSU Orientation!</h1>
+                <br />
+                <p className="text-xl font-medium">
+                    To open the QR code for your booth, click on the booths tab.
+                </p>
+            </div>
+        )
     }
 
     return null
+}
+
+async function DashboardStamps({ userId }: DecodedJwt) {
+    const stamps = await prisma.stamp.findMany({
+        where: { userId },
+        include: { booth: true }
+    })
+
+    return (
+        <div className="p-8">
+            <h1 className="text-4xl font-extrabold">Your Stamps</h1>
+            <br />
+            <div className="grid grid-cols-2 gap-4">
+                {stamps.length == 0 ? (
+                    <p className="text-lg font-medium">
+                        You have not collected any stamps yet. Go visit some booths!
+                    </p>
+                ) : (
+                    stamps.map((stamp) => (
+                        <div key={stamp.stampId} className="flex flex-col items-center">
+                            <p className="text-lg font-semibold">{stamp.booth.description}</p>
+                        </div>
+                    ))
+                )}
+            </div>
+        </div>
+    )
 }
