@@ -7,16 +7,10 @@ import DashboardNav from '@/components/DashboardNav'
 import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import prisma from '@/lib/prisma'
-import { type UserRole } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { isTokenValid, refreshAccessToken } from '@/lib/auth'
 import DashboardBooths from '../../components/booths'
-
-type DecodedJwt = {
-    userId: string
-    email: string
-    role: UserRole
-}
+import { DecodedJwt } from '@/lib/types'
 
 export default async function Dashboard() {
     // Why the cookie must be present: This is ensured by the middleware. However,
