@@ -34,7 +34,7 @@ import { OTP_EXPIRY_SECONDS } from '@/lib/constants'
 
 interface LoginProps {
     size: 'icon' | 'default' | 'sm' | 'lg' | null | undefined
-    className: string
+    className?: string
 }
 
 export default function Login({ size, className }: LoginProps) {
