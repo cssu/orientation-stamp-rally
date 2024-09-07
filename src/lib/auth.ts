@@ -1,6 +1,7 @@
 import prisma from './prisma'
 import jwt from 'jsonwebtoken'
 import { JWT_EXPIRY } from './constants'
+import redis from './redis'
 
 export async function isRefreshTokenValid(refreshToken: string): Promise<boolean> {
     const refreshTokenObject = await prisma.refreshToken.findUnique({
@@ -55,7 +56,7 @@ export async function refreshAccessToken(refreshToken: string): Promise<string |
     }
 }
 
-export function isTokenValid(token: string): boolean {
+export async function isTokenValid(token: string): Promise<boolean> {
     try {
         // jwt.verify already checks if the token is expired
         jwt.verify(token, process.env.JWT_SECRET!)
@@ -64,7 +65,8 @@ export function isTokenValid(token: string): boolean {
         // one concern in this function, but since roles are manually assigned
         // this should not be a problem.
 
-        return true
+        const isBlacklisted = (await redis.persistent.get(`blacklist:${token}`)) !== null
+        return !isBlacklisted
     } catch (error) {
         return false
     }

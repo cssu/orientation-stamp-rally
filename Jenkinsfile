@@ -32,10 +32,13 @@ URL=https://orientation.cssu.ca
             }
         }
         
-        stage('Deploy') {
+        stage('Deploy and Migrate') {
             steps {
                 script {
                     sh 'docker compose up -d --wait'
+
+                    sh 'prisma migrate deploy'
+                    sh 'prisma db seed'
                 }
             }
         }

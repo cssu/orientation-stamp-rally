@@ -9,7 +9,7 @@ import { cookies } from 'next/headers'
 import prisma from '@/lib/prisma'
 import { type UserRole } from '@prisma/client'
 import { redirect } from 'next/navigation'
-import { refreshAccessToken } from '@/lib/auth'
+import { isTokenValid, refreshAccessToken } from '@/lib/auth'
 import DashboardBooths from './booths'
 
 type DecodedJwt = {
@@ -22,7 +22,7 @@ export default async function Dashboard() {
     // Why the cookie must be present: This is ensured by the middleware. However,
     // The cookie might expire in the meantime.
     let accessToken = cookies().get('accessToken')?.value
-    if (!accessToken) {
+    if (!accessToken || !(await isTokenValid(accessToken))) {
         const refreshToken = cookies().get('refreshToken')?.value
         if (!refreshToken) {
             redirect('/')
