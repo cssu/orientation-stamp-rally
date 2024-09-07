@@ -37,7 +37,7 @@ export default async function Dashboard() {
     return (
         <TooltipProvider>
             <Tabs
-                className="flex grow items-strech flex-row justify-between h-full p-4"
+                className="tabs grow items-strech flex-row justify-between h-full p-4"
                 defaultValue="home"
             >
                 <DashboardNav role={decoded.role} />
@@ -164,27 +164,55 @@ async function DashboardStamps({ userId }: DecodedJwt) {
             }
         }
     })
+    const [nBoothsVisited, remainingBooths] = await prisma.$transaction([
+        prisma.stamp.count({
+            where: { userId }
+        }),
+        prisma.booth.count()
+    ])
 
     return (
         <div className="p-8">
-            <h1 className="text-4xl font-extrabold">Your Stamps</h1>
+            <h1 className="text-4xl font-extrabold">
+                Your Stamps (visited {nBoothsVisited}/{nBoothsVisited + remainingBooths})
+            </h1>
             <br />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-4">
                 {stamps.length == 0 ? (
                     <p className="text-lg font-medium">
                         You have not collected any stamps yet. Go visit some booths!
                     </p>
                 ) : (
                     stamps.map((stamp) => (
-                        <div key={stamp.stampId} className="flex flex-col items-center">
-                            {stamp.booth.organization.logo && (
-                                <Image
-                                    src={`/logos/${stamp.booth.organization.logo}`}
-                                    alt={`${stamp.booth.organization.name} Stamp`}
-                                    width={200}
-                                    height={200}
-                                />
-                            )}
+                        <div
+                            key={stamp.stampId}
+                            style={{
+                                border: '2px solid lightgrey',
+                                maxWidth: '50%',
+                                paddingRight: 30,
+                                borderRadius: 20,
+                                backgroundColor: 'white'
+                            }}
+                        >
+                            <div key={stamp.stampId} className="flex" style={{ marginLeft: 16 }}>
+                                {stamp.booth.organization.logo && (
+                                    <>
+                                        <Image
+                                            src={`/logos/${stamp.booth.organization.logo}`}
+                                            alt={`${stamp.booth.organization.name} Stamp`}
+                                            style={{ marginTop: 0, marginRight: 20 }}
+                                            width={100}
+                                            height={100}
+                                            className="align-middle"
+                                        />
+                                        <p style={{ fontSize: 30 }} className="m-auto">
+                                            <b>
+                                                <i>{stamp.booth.organization.name}</i>
+                                            </b>
+                                        </p>
+                                    </>
+                                )}
+                            </div>
                         </div>
                     ))
                 )}
