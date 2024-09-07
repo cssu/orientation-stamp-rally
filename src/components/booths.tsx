@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 
-function DashboardBooths({ boothId }: { boothId: string }) {
+export default function DashboardBooths({ boothId }: { boothId: string }) {
     const [qrCodeValue, setQrCodeValue] = useState<string>('')
+    const [remainingSeconds, setRemainingSeconds] = useState<number>(10)
 
     const generateQrCodeData = async () => {
         const response = await fetch('/api/leader', {
@@ -19,24 +20,34 @@ function DashboardBooths({ boothId }: { boothId: string }) {
     useEffect(() => {
         generateQrCodeData()
 
-        const intervalId = setInterval(() => {
-            generateQrCodeData()
-        }, 10000)
+        const countdownIntervalId = setInterval(() => {
+            setRemainingSeconds((prev) => {
+                if (prev === 1) {
+                    generateQrCodeData()
+                    return 10
+                }
+                return prev - 1
+            })
+        }, 1000)
 
-        // Cleanup interval on component unmount
-        return () => clearInterval(intervalId)
+        return () => {
+            clearInterval(countdownIntervalId)
+        }
     }, [])
 
     return (
-        <div style={{ alignSelf: 'center', maxWidth: '80vw' }}>
+        <div className="items-center max-w-[80vw]">
             <div>
-                <h1 style={{ textAlign: 'center' }}>
+                <h1 className="text-center text-xl font-semibold">
                     Current QR code (for booth ID <b>{boothId}</b>):
+                </h1>
+                <h1 className="text-center font-semibold">
+                    Time remaining: <span className="font-bold text-2xl">{remainingSeconds}</span>s
                 </h1>
                 <br />
                 <center>
                     {qrCodeValue ? (
-                        <QRCodeSVG value={qrCodeValue} width="35%" height="35%" />
+                        <QRCodeSVG value={qrCodeValue} width="45%" height="45%" />
                     ) : (
                         <p>Loading QR code...</p>
                     )}
@@ -45,5 +56,3 @@ function DashboardBooths({ boothId }: { boothId: string }) {
         </div>
     )
 }
-
-export default DashboardBooths

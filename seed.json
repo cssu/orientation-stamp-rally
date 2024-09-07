@@ -83,13 +83,7 @@
             "club": "UofT Blueprint",
             "booth": "B9",
             "logo": "uoftblueprint.jpeg"
-        },
-        {
-            "email": "gabriel.thompson@mail.utoronto.ca",
-            "club": "UofT Compilers",
-            "booth": "B10",
-            "logo": ""
         }
     ],
-    "admins": ["jason.barahan@mail.utoronto.ca"]
+    "admins": ["gabriel.thompson@mail.utoronto.ca", "j.barahan@mail.utoronto.ca"]
 }

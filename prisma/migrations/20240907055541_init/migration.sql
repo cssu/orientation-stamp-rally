@@ -31,6 +31,7 @@ CREATE TABLE "Organization" (
     "organizationId" UUID NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "createdAt" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "logo" VARCHAR(255),
 
     CONSTRAINT "Organization_pkey" PRIMARY KEY ("organizationId")
 );
