@@ -2,13 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import redis from '@/lib/redis'
 import jwt from 'jsonwebtoken'
+import { DecodedJwt } from '@/lib/types'
 
 const QR_SCAN_PERIOD = 15000
-
-type DecodedJwt = {
-    userId: string
-    email: string
-}
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
