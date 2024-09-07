@@ -26,6 +26,7 @@ async function sendOtp(email: string, otp: string) {
         return
     }
 
+    console.log("OTP for email", email, otp)
     await mail.sendMail({
         from: 'CSSU <cssu@vm004>',
         to: email,
