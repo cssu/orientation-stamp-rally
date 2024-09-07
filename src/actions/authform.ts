@@ -39,7 +39,7 @@ async function sendOtp(email: string, otp: string) {
         <p>Good luck on the stamp hunt! 😊</p>
         <p>-CSSU</p>
         <p><i>(This one-time password will expire in ${OTP_EXPIRY_SECONDS} seconds)</i></p>
-        <img src="https://orientation.cssu.ca/cssu.svg" style="width: 200px" />
+        <img src="https://www.cssu.ca/nextImageExportOptimizer/horizontal_logo_black.4f2d58d3-opt-3840.WEBP" style="width: 260px" />
         `
         })
         .catch((error) => {
