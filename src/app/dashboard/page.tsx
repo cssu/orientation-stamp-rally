@@ -41,7 +41,7 @@ export default async function Dashboard() {
     return (
         <TooltipProvider>
             <Tabs
-                className="flex grow items-strech flex-row justify-between h-full p-4"
+                className="tabs grow items-stretch flex-row justify-between h-full p-4"
                 defaultValue="home"
             >
                 <DashboardNav role={decoded.role} />
