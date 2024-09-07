@@ -3,7 +3,7 @@ import { Separator } from '@radix-ui/react-dropdown-menu'
 
 import { cn } from '@/lib/utils'
 
-import { HomeIcon, StampIcon } from 'lucide-react'
+import { HomeIcon, StampIcon, DatabaseIcon } from 'lucide-react'
 import { TabsList, TabsTrigger } from './ui/tabs'
 import { UserRole } from '@prisma/client'
 
@@ -39,7 +39,7 @@ export default function DashboardNav({ role }: { role: UserRole }) {
                     icon: StampIcon,
                     variant: 'ghost',
                     value: 'booths'
-                },
+                }
                 // {
                 //     title: 'Stamps',
                 //     icon: StampIcon,
@@ -48,8 +48,27 @@ export default function DashboardNav({ role }: { role: UserRole }) {
                 // }
             ]
             break
-        default:
-            links = []
+        case 'admin':
+            links = [
+                {
+                    title: 'Home',
+                    icon: HomeIcon,
+                    variant: 'ghost',
+                    value: 'home'
+                },
+                {
+                    title: 'Test Stamp',
+                    icon: StampIcon,
+                    variant: 'ghost',
+                    value: 'teststamp'
+                },
+                {
+                    title: 'Stats',
+                    icon: DatabaseIcon,
+                    variant: 'ghost',
+                    value: 'stats'
+                }
+            ]
     }
 
     return (
