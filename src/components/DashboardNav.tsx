@@ -40,13 +40,12 @@ export default function DashboardNav({ role }: { role: UserRole }) {
                     variant: 'ghost',
                     value: 'booths'
                 },
-                // TODO: REMOVE - THIS IS TEMP
-                {
-                    title: 'Stamps',
-                    icon: StampIcon,
-                    variant: 'ghost',
-                    value: 'stamps'
-                }
+                // {
+                //     title: 'Stamps',
+                //     icon: StampIcon,
+                //     variant: 'ghost',
+                //     value: 'stamps'
+                // }
             ]
             break
         default:

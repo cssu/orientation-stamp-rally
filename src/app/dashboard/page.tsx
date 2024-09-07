@@ -85,9 +85,9 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                     <TabsContent value="booths" className="m-0">
                         <DashboardBooths boothId={boothId} />
                     </TabsContent>
-                    <TabsContent value="stamps" className="m-0">
+                    {/* <TabsContent value="stamps" className="m-0">
                         <DashboardStamps {...decoded} />
-                    </TabsContent>
+                    </TabsContent> */}
                 </div>
             )
         case 'admin':
