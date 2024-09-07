@@ -31,12 +31,15 @@ async function sendOtp(email: string, otp: string) {
         .sendMail({
             from: 'CSSU <cssu@vm004.teach.cs.toronto.edu>',
             to: email,
-            subject: 'Your OTP for CSSU Orientation Portal',
-            text: `Your OTP for the CSSU Orientation Portal is: ${otp}. This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.`,
+            subject: 'Your one-time password for CSSU Orientation Portal',
+            text: `Your one-time password for the CSSU Orientation Portal is: ${otp}. This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.`,
             html: `
-        <p>Your OTP for the CSSU Orientation Portal is:</p>
+        <p>Your one-time password for the CSSU Orientation Portal is:</p>
         <h1>${otp}</h1>
-        <p>This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.</p>
+        <p>Good luck on the stamp hunt 😊</p>
+        <p>-CSSU</p>
+        <p><i>(This one-time password will expire in ${OTP_EXPIRY_SECONDS} seconds)</i></p>
+        <img src="https://orientation.cssu.ca/cssu.svg" style="width: 200px" />
         `
         })
         .catch((error) => {
