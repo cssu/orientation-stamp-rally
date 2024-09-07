@@ -37,9 +37,8 @@ export async function POST(req: NextRequest) {
         timestamp
     }
 
-    await redis.ephemeral.set(`qr:${boothId}`, JSON.stringify(qrData), 'EX', 10)
+    await redis.ephemeral.set(`qr:${boothId}`, JSON.stringify(qrData), 'EX', 15)
 
-    console.log(payload)
     const qr = `${process.env.URL}/api/visit?qr=${encodeURIComponent(payload)}&boothId=${boothId}`
 
     return NextResponse.json({ qr })

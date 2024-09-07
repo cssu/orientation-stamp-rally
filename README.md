@@ -10,4 +10,4 @@ A stamp rally for the 2024-2025 CS Freshman Orientation held by the CSSU.
 ## Contributing
 Branch names should follow the syntax `author/branch-type/branch-name`. For example, `zuck/feature/harvesting-user-data`.
 
-Don't forget to run `yarn prisma migrate dev` after making changes to the schema!
+Don't forget to run `yarn prisma migrate dev --name=init` after making changes to the schema!

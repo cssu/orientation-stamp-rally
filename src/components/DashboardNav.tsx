@@ -39,7 +39,13 @@ export default function DashboardNav({ role }: { role: UserRole }) {
                     icon: StampIcon,
                     variant: 'ghost',
                     value: 'booths'
-                }
+                },
+                // {
+                //     title: 'Stamps',
+                //     icon: StampIcon,
+                //     variant: 'ghost',
+                //     value: 'stamps'
+                // }
             ]
             break
         default:

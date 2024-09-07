@@ -1,6 +1,8 @@
 pipeline {
     agent any
-    
+    tools {
+        nodejs '20.17.0'
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -17,6 +19,7 @@ pipeline {
                     ]) {
                 def envContent = """
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+DATABASE_URL=postgresql://orientation:${POSTGRES_PASSWORD}@localhost:5432
 JWT_SECRET=${JWT_SECRET}
 URL=https://orientation.cssu.ca
 """
@@ -37,8 +40,9 @@ URL=https://orientation.cssu.ca
                 script {
                     sh 'docker compose up -d --wait'
 
-                    sh 'yarn prisma migrate deploy'
-                    sh 'yarn prisma db seed'
+                    sh 'prisma generate'
+                    sh 'prisma migrate deploy'
+                    sh 'prisma db seed'
                 }
             }
         }

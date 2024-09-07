@@ -38,7 +38,7 @@ async function main() {
     }
 
     for (const clubData of data.clubs) {
-        const { email, club, booth } = clubData
+        const { email, club, booth, logo } = clubData
 
         const existingClubRep = await seedingPrisma.user.findUnique({ where: { email } })
 
@@ -50,7 +50,8 @@ async function main() {
             if (!organization) {
                 organization = await seedingPrisma.organization.create({
                     data: {
-                        name: club
+                        name: club,
+                        logo,
                     }
                 })
             }
@@ -68,6 +69,7 @@ async function main() {
             })
 
             if (!existingBooth) {
+                console.log(`Creating booth for ${club}: ${booth}, ${organization.organizationId}`)
                 await seedingPrisma.booth.create({
                     data: {
                         boothId: booth,
