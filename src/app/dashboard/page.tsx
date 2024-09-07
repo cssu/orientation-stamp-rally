@@ -7,10 +7,16 @@ import DashboardNav from '@/components/DashboardNav'
 import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import prisma from '@/lib/prisma'
+import { type UserRole } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { isTokenValid, refreshAccessToken } from '@/lib/auth'
 import DashboardBooths from '../../components/booths'
-import { DecodedJwt } from '@/lib/types'
+
+type DecodedJwt = {
+    userId: string
+    email: string
+    role: UserRole
+}
 
 export default async function Dashboard() {
     // Why the cookie must be present: This is ensured by the middleware. However,
@@ -35,7 +41,7 @@ export default async function Dashboard() {
     return (
         <TooltipProvider>
             <Tabs
-                className="tabs grow items-stretch flex-row justify-between h-full p-4"
+                className="flex grow items-strech flex-row justify-between h-full p-4"
                 defaultValue="home"
             >
                 <DashboardNav role={decoded.role} />
@@ -73,8 +79,9 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                 }
             })
 
-            // TODO: Right now, every organization has only one booth. This may change in the future.
             const boothId = org!.organization?.booths[0]!.boothId!
+            const websiteRoot = process.env.URL!
+
             return (
                 <div>
                     <Separator />
@@ -86,19 +93,12 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                     </TabsContent>
                 </div>
             )
-        case 'admin':
-            return (
-                <div>
-                    <Separator />
-                    <TabsContent value="home" className="m-0">
-                        <DashboardHome {...decoded} />
-                    </TabsContent>
-                </div>
-            )
+        default:
+            return null
     }
 }
 
-async function DashboardHome({ userId, role }: DecodedJwt) {
+async function DashboardHome({ userId, email, role }: DecodedJwt) {
     const [nBoothsVisited, remainingBooths] = await prisma.$transaction([
         prisma.stamp.count({
             where: { userId }
@@ -106,48 +106,35 @@ async function DashboardHome({ userId, role }: DecodedJwt) {
         prisma.booth.count()
     ])
 
-    switch (role) {
-        case 'participant':
-            return (
-                <div className="p-8">
-                    <h1 className="text-4xl font-extrabold">Welcome to CSSU Orientation!</h1>
-                    <br />
-                    <p className="text-xl font-medium">
-                        {remainingBooths == 0
-                            ? 'Congratulations! You have collected all stamps.'
-                            : `You have visited ${nBoothsVisited} booths. You can still visit ${remainingBooths} booths!`}
-                    </p>
-                    <br />
-                    <h2 className="text-3xl font-semibold">How it Works:</h2>
-                    <p className="text-lg">
-                        Visit each club booths and scan the QR code within 10 seconds to get a
-                        stamp. Once
-                        {'more details here'}
-                    </p>
-                </div>
-            )
-        case 'club_representative':
-            return (
-                <div className="p-8">
-                    <h1 className="text-4xl font-extrabold">Welcome to CSSU Orientation!</h1>
-                    <br />
-                    <p className="text-xl font-medium">
-                        To open the QR code for your booth, click on the booths tab.
-                    </p>
-                </div>
-            )
-        case 'admin':
-            return (
-                <div className="p-8">
-                    <h1 className="text-4xl font-extrabold">
-                        Welcome to CSSU Orientation, Mr. Admin 😎!
-                    </h1>
-                    <br />
-                    <p className="text-xl font-medium">
-                        As an admin, you have access to all the features of the dashboard.
-                    </p>
-                </div>
-            )
+    if (role == 'participant') {
+        return (
+            <div className="p-8">
+                <h1 className="text-4xl font-extrabold">Welcome to CSSU Orientation!</h1>
+                <br />
+                <p className="text-xl font-medium">
+                    {remainingBooths == 0
+                        ? 'Congratulations! You have collected all stamps.'
+                        : `You have visited ${nBoothsVisited} booths. You can still visit ${remainingBooths} booths!`}
+                </p>
+                <br />
+                <h2 className="text-3xl font-semibold">How it Works:</h2>
+                <p className="text-lg">
+                    Visit each club booths and scan the QR code within 10 seconds to get a stamp.
+                    Once
+                    {'more details here'}
+                </p>
+            </div>
+        )
+    } else if (role == 'club_representative') {
+        return (
+            <div className="p-8">
+                <h1 className="text-4xl font-extrabold">Welcome to CSSU Orientation!</h1>
+                <br />
+                <p className="text-xl font-medium">
+                    To open the QR code for your booth, click on the booths tab.
+                </p>
+            </div>
+        )
     }
 
     return null

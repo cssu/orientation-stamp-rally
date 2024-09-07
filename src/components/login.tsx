@@ -32,7 +32,12 @@ import { useState } from 'react'
 import OTPInput from './otp-input'
 import { OTP_EXPIRY_SECONDS } from '@/lib/constants'
 
-export default function Login() {
+interface LoginProps {
+    size: 'icon' | 'default' | 'sm' | 'lg' | null | undefined
+    className: string
+}
+
+export default function Login({ size, className }: LoginProps) {
     const [loading, setLoading] = useState<boolean>(false)
     const [atOtpStep, setAtOtpStep] = useState<boolean>(false)
     const [timeLeftSeconds, setTimeLeftSeconds] = useState<number>(OTP_EXPIRY_SECONDS)
@@ -96,7 +101,9 @@ export default function Login() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button>Login</Button>
+                <Button className={className} size={size}>
+                    Login
+                </Button>
             </DialogTrigger>
             <DialogContent className="flex justify-center items-center sm:max-w-sm">
                 {!atOtpStep ? (
