@@ -36,7 +36,7 @@ async function sendOtp(email: string, otp: string) {
             html: `
         <p>Your one-time password for the CSSU Orientation Portal is:</p>
         <h1>${otp}</h1>
-        <p>Good luck on the stamp hunt 😊</p>
+        <p>Good luck on the stamp hunt! 😊</p>
         <p>-CSSU</p>
         <p><i>(This one-time password will expire in ${OTP_EXPIRY_SECONDS} seconds)</i></p>
         <img src="https://orientation.cssu.ca/cssu.svg" style="width: 200px" />
