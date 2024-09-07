@@ -37,7 +37,7 @@ export default async function NavigationList() {
                             </Link>
                         </div>
                     ) : (
-                        <Login />
+                        <Login size="default" />
                     )}
                 </NavigationMenuItem>
             </NavigationMenuList>
