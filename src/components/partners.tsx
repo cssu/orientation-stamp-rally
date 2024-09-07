@@ -4,19 +4,29 @@ import { StackedCarousel } from "react-card-stack-carousel";
 import "react-card-stack-carousel/styles/styles.css";
 
 const partnerData = [
-    { name: 'CSSU', logo: 'cssu.svg'},
-    { name: 'Partner 1', logo: '/logos/bacsa.jpg' },
-    { name: 'Partner 2', logo: '/logos/cssa.jpg' },
-    { name: 'Partner 3', logo: '/logos/dsc_utsg.png' },
-    { name: 'Partner 4', logo: '/logos/gddc.webp' },
-    { name: 'Partner 5', logo: '/logos/helloworld.png' },
-    // Add more partners as needed
-];
+    { name: "CSSU", logo: "../cssu.svg" },
+    { name: "IEEE UofT", logo: "ieee.png" },
+    { name: "UTGDDC", logo: "gddc.webp" },
+    { name: "UTOSS", logo: "utoss.jpg" },
+    { name: "UofT WiCS", logo: "wics.png" },
+    { name: "UofT Esports", logo: "utes.jpg" },
+    { name: "UTASR", logo: "utasr.jpg" },
+    { name: "UoftHacks", logo: "uofthacks.png" },
+    { name: "UofTCTF", logo: "uoftctf.png" },
+    { name: "GDSC", logo: "dsc_utsg.png" },
+    { name: "illuminaite UofT", logo: "illuminaite.jpg" },
+    { name: "CSSA", logo: "cssa.jpg" },
+    { name: "UTMIST", logo: "utmist.png" },
+    { name: "UofT AI", logo: "uoft_ai.jpeg" },
+    { name: "UofT Blueprint", logo: "uoftblueprint.jpeg" }
+].map(partner => ({...partner, logo: `/logos/${partner.logo}`}));
+
 
 
 const PartnerCardStack = () => {
     const [isAutoplay, setIsAutoplay] = useState(true);
     const [lastInteraction, setLastInteraction] = useState(Date.now());
+    const [isMounted, setIsMounted] = useState(false); // New state to ensure component is mounted
 
     const handleNavigation = useCallback(() => {
         setIsAutoplay(false);
@@ -24,9 +34,11 @@ const PartnerCardStack = () => {
     }, []);
 
     useEffect(() => {
+        setIsMounted(true);  // Set mounted state to true when component is mounted
+
         const checkAutoplayResume = () => {
             const currentTime = Date.now();
-            if (currentTime - lastInteraction > 5000) {
+            if (currentTime - lastInteraction > 2000) {
                 setIsAutoplay(true);
             }
         };
@@ -36,14 +48,18 @@ const PartnerCardStack = () => {
         return () => clearInterval(intervalId);
     }, [lastInteraction]);
 
+    if (!isMounted) {
+        return null;
+    }
+
     return (
-        <div className="w-80 h-80">
+        <div className="w-80 h-80 relative">
             <StackedCarousel
                 height="300"
                 autoplay={isAutoplay}
-                autoplayInterval={3000}
+                autoplayInterval={1000}
                 scaleFactor={0.95}
-                transitionDuration={800}
+                transitionDuration={400}
                 verticalOffset={10}
                 easingFunction="cubic-bezier(0.91, 0.01, 0.6, 0.99)"
                 onNext={handleNavigation}
@@ -56,9 +72,9 @@ const PartnerCardStack = () => {
                             alt={`${partner.name} logo`}
                             width={200}
                             height={200}
-                            className="object-contain mb-2"
+                            className="object-contain"
                         />
-                        <p className="text-center font-semibold">{partner.name}</p>
+                        <p className="mt-2 text-center">{partner.name}</p>
                     </div>
                 ))}
             </StackedCarousel>
