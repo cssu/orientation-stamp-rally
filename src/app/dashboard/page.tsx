@@ -10,7 +10,7 @@ import prisma from '@/lib/prisma'
 import { type UserRole } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { isTokenValid, refreshAccessToken } from '@/lib/auth'
-import DashboardBooths from './booths'
+import DashboardBooths from '../../components/booths'
 
 type DecodedJwt = {
     userId: string
@@ -32,6 +32,7 @@ export default async function Dashboard() {
         if (!newAt) {
             redirect('/')
         }
+
         accessToken = newAt
     }
 
