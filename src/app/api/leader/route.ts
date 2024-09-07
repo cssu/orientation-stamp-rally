@@ -12,9 +12,9 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'No access token found. Log in again.' })
     }
 
-    const decoded = jwt.decode(accessToken) as { userId: string }
+    const decoded = jwt.decode(accessToken) as { userId: string, role: string }
 
-    const boothId = await prisma.user
+    const boothId = decoded.role === "admin" ? "NA" : await prisma.user
         .findUnique({
             where: { userId: decoded.userId },
             select: {
