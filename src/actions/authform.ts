@@ -26,18 +26,23 @@ async function sendOtp(email: string, otp: string) {
         return
     }
 
-    console.log("OTP for email", email, otp)
-    await mail.sendMail({
-        from: 'CSSU <cssu@vm004>',
-        to: email,
-        subject: 'Your OTP for CSSU Orientation Portal',
-        text: `Your OTP for the CSSU Orientation Portal is: ${otp}. This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.`,
-        html: `
+    console.log('OTP for email', email, otp)
+    await mail
+        .sendMail({
+            from: 'CSSU <cssu@vm004>',
+            to: email,
+            subject: 'Your OTP for CSSU Orientation Portal',
+            text: `Your OTP for the CSSU Orientation Portal is: ${otp}. This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.`,
+            html: `
         <p>Your OTP for the CSSU Orientation Portal is:</p>
         <h1>${otp}</h1>
         <p>This OTP will expire in ${OTP_EXPIRY_SECONDS} seconds.</p>
         `
-    })
+        })
+        .catch((error) => {
+            console.error('Error sending OTP:', error)
+            throw new Error('Error sending OTP')
+        })
 }
 
 async function generateOTP(email: string): Promise<Message> {
@@ -61,8 +66,7 @@ async function generateOTP(email: string): Promise<Message> {
     await redis.ephemeral.set(`${email}:lastGenerated`, unixSeconds, 'EX', OTP_EXPIRY_SECONDS)
     await redis.ephemeral.set(`${email}:attempts`, 0, 'EX', OTP_EXPIRY_SECONDS)
 
-    await sendOtp(email, generatedOTP).catch((error) => {
-        console.error('Error sending OTP:', error)
+    await sendOtp(email, generatedOTP).catch(() => {
         return {
             success: false,
             otpGenerated: false,
