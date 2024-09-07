@@ -11,40 +11,47 @@ export async function GET(req: NextRequest) {
     const receivedPayload = searchParams.get('qr')
     const boothId = searchParams.get('boothId')
 
-    if (!receivedPayload) {
-        return NextResponse.json({ valid: false, message: 'Missing payload' })
+    const accessToken = req.cookies.get('accessToken')?.value
+    if (!accessToken) {
+        return NextResponse.redirect(process.env.URL + '/scanned?validity=1')
     }
 
-    if (!boothId) {
-        return NextResponse.json({ valid: false, message: 'Missing boothId' })
+    if (!receivedPayload || !boothId) {
+        return NextResponse.redirect(process.env.URL + '/scanned?validity=2')
     }
 
     const redisData = await redis.ephemeral.get(`qr:${boothId}`)
 
     if (!redisData) {
-        return NextResponse.json({ valid: false, message: 'QR code not found' })
+        return NextResponse.redirect(process.env.URL + '/scanned?validity=3')
     }
 
     const { payload, timestamp } = JSON.parse(redisData)
 
     if (decodeURIComponent(receivedPayload) != payload) {
-        return NextResponse.json({ valid: false, message: 'Invalid QR code' })
+        return NextResponse.redirect(process.env.URL + '/scanned?validity=3')
     }
 
     const currentTime = new Date().getTime()
     const qrGenerationTime = new Date(timestamp).getTime()
 
     if (currentTime - qrGenerationTime > QR_SCAN_PERIOD) {
-        return NextResponse.json({ valid: false, message: 'QR code expired' })
-    }
-
-    const accessToken = req.cookies.get('accessToken')?.value
-    if (!accessToken) {
-        return NextResponse.json({ valid: false, message: 'No access token found. Log in again.' })
+        return NextResponse.redirect(process.env.URL + '/scanned?validity=3')
     }
 
     const decoded = jwt.decode(accessToken) as DecodedJwt
 
+    const existingStamp = await prisma.stamp.findFirst({
+        where: {
+            userId: decoded.userId,
+            boothId: boothId
+        }
+    })
+    
+    if (existingStamp) {
+        return NextResponse.redirect(process.env.URL + '/scanned?validity=4')
+    }
+    
     await prisma.stamp.create({
         data: {
             user: {
@@ -56,5 +63,5 @@ export async function GET(req: NextRequest) {
         }
     })
 
-    return NextResponse.redirect(process.env.URL + '/dashboard')
+    return NextResponse.redirect(process.env.URL + '/scanned?validity=5')
 }
