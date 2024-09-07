@@ -3,77 +3,92 @@
         {
             "email": "ieeeutstudentbranch@gmail.com",
             "club": "IEEE UofT",
-            "booth": "A1"
+            "booth": "A1",
+            "logo": "ieee.png"
         },
         {
             "email": "ricky.wen@mail.utoronto.ca",
             "club": "UTGDDC",
-            "booth": "A2"
+            "booth": "A2",
+            "logo": "gddc.webp"
         },
         {
             "email": "yuxuan.seah@mail.utoronto.ca",
             "club": "UTOSS",
-            "booth": "A3"
+            "booth": "A3",
+            "logo": "utoss.jpg"
         },
         {
             "email": "wicsuoft@gmail.com",
             "club": "UofT WiCS",
-            "booth": "A4"
+            "booth": "A4",
+            "logo": "wics.png"
         },
         {
             "email": "uoft.esports@gmail.com",
             "club": "UofT Esports",
-            "booth": "A5"
+            "booth": "A5",
+            "logo": "utes.jpg"
         },
         {
             "email": "yushu.wang@mail.utoronto.ca",
             "club": "UTASR",
-            "booth": "B1"
+            "booth": "B1",
+            "logo": "utasr.jpg"
         },
         {
             "email": "angeladeng423@gmail.com",
             "club": "UoftHacks",
-            "booth": "B2"
+            "booth": "B2",
+            "logo": "uofthacks.png"
         },
         {
             "email": "mail@uoftctf.org",
             "club": "UofTCTF",
-            "booth": "B3"
+            "booth": "B3",
+            "logo": "uoftctf.png"
         },
         {
             "email": "colleenchangxy@gmail.com",
             "club": "GDSC",
-            "booth": "B4"
+            "booth": "B4",
+            "logo": "dsc_utsg.png"
         },
         {
             "email": "illuminaiteacademy@gmail.com",
             "club": "illuminaite UofT",
-            "booth": "B5"
+            "booth": "B5",
+            "logo": "illuminaite.jpg"
         },
         {
             "email": "emily.mamcarz@mail.utoronto.ca",
             "club": "CSSA (Cybersecurity Student Association)",
-            "booth": "B6"
+            "booth": "B6",
+            "logo": "cssa.jpg"
         },
         {
             "email": "utorontomist@gmail.com",
             "club": "UTMIST",
-            "booth": "B7"
+            "booth": "B7",
+            "logo": "utmist.png"
         },
         {
             "email": "mail2devshah@gmail.com",
             "club": "UofT AI",
-            "booth": "B8"
+            "booth": "B8",
+            "logo": "uoft_ai.jpeg"
         },
         {
             "email": "contact@uoftblueprint.org",
             "club": "UofT Blueprint",
-            "booth": "B9"
+            "booth": "B9",
+            "logo": "uoftblueprint.jpeg"
         },
         {
             "email": "baris.bayazit@mail.utoronto.ca",
             "club": "UofT Compilers",
-            "booth": "B10"
+            "booth": "B10",
+            "logo": ""
         }
     ],
     "admins": ["gabriel.thompson@mail.utoronto.ca", "j.barahan@mail.utoronto.ca"]
