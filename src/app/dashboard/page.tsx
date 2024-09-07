@@ -112,7 +112,7 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
 }
 
 async function DashboardHome({ userId, email, role }: DecodedJwt) {
-    const [nBoothsVisited, remainingBooths] = await prisma.$transaction([
+    const [nBoothsVisited, totalBooths] = await prisma.$transaction([
         prisma.stamp.count({
             where: { userId }
         }),
@@ -120,6 +120,7 @@ async function DashboardHome({ userId, email, role }: DecodedJwt) {
             where: { NOT: { boothId: 'NA' } }
         })
     ])
+    const remainingBooths = totalBooths - nBoothsVisited
 
     switch (role) {
         case 'participant':
@@ -180,17 +181,19 @@ async function DashboardStamps({ userId }: DecodedJwt) {
             }
         }
     })
-    const [nBoothsVisited, remainingBooths] = await prisma.$transaction([
+    const [nBoothsVisited, totalBooths] = await prisma.$transaction([
         prisma.stamp.count({
             where: { userId }
         }),
-        prisma.booth.count()
+        prisma.booth.count({
+            where: { NOT: { boothId: 'NA' } }
+        })
     ])
 
     return (
         <div className="p-8">
             <h1 className="text-4xl font-extrabold">
-                Your Stamps (visited {nBoothsVisited}/{nBoothsVisited + remainingBooths})
+                Your Stamps (visited {nBoothsVisited}/{totalBooths})
             </h1>
             <br />
             <div className="grid gap-4">
