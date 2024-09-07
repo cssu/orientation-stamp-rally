@@ -205,7 +205,7 @@ async function DashboardStamps({ userId }: DecodedJwt) {
                             key={stamp.stampId}
                             style={{
                                 border: '2px solid lightgrey',
-                                maxWidth: '50%',
+                                maxWidth: '80%',
                                 paddingRight: 30,
                                 borderRadius: 20,
                                 backgroundColor: 'white'
