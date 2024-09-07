@@ -19,6 +19,7 @@ pipeline {
                     ]) {
                 def envContent = """
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+DATABASE_URL=postgresql://orientation:${POSTGRES_PASSWORD}@localhost:5432
 JWT_SECRET=${JWT_SECRET}
 URL=https://orientation.cssu.ca
 """
@@ -39,9 +40,9 @@ URL=https://orientation.cssu.ca
                 script {
                     sh 'docker compose up -d --wait'
 
-                    sh 'npx --yes prisma generate'
-                    sh 'npx --yes prisma migrate deploy'
-                    sh 'npx --yes prisma db seed'
+                    sh 'prisma generate'
+                    sh 'prisma migrate deploy'
+                    sh 'prisma db seed'
                 }
             }
         }
