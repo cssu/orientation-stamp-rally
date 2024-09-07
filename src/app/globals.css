@@ -24,6 +24,7 @@
     .dashboard-mobile,
     .mainpage-mobile {
         display: block;
+        overflow: scroll;
     }
 
     .tabs {
@@ -34,4 +35,13 @@
 .tutorial > *,
 .tutorial > ol > li {
     margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.credits {
+    display: inline;
+}
+
+.credits > a {
+    text-decoration: underline;
 }

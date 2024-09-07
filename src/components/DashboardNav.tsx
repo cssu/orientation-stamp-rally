@@ -67,7 +67,7 @@ export default function DashboardNav({ role }: { role: UserRole }) {
                     icon: DatabaseIcon,
                     variant: 'ghost',
                     value: 'stats'
-                },
+                }
             ]
     }
 

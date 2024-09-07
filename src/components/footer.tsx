@@ -19,34 +19,54 @@ export default function Footer() {
                     </Link>
                 </div>
                 <div className="grid gap-2">
-                    <h4 className="text-sm font-semibold">Quick Links</h4>
+                    <h4 className="text-sm font-semibold">Social Media</h4>
                     <nav className="grid gap-1">
-                        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                            Home
+                        <Link
+                            href="https://www.cssu.ca/"
+                            className="text-sm hover:underline"
+                            prefetch={false}
+                        >
+                            Main website
                         </Link>
-                        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                            About
+                        <Link
+                            href="https://www.instagram.com/uoftcssu"
+                            className="text-sm hover:underline"
+                            prefetch={false}
+                        >
+                            Instagram
                         </Link>
-                        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                            Services
+                        <Link
+                            href="https://www.facebook.com/UofTCSSU/"
+                            className="text-sm hover:underline"
+                            prefetch={false}
+                        >
+                            Facebook
                         </Link>
-                        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                            Contact
+                        <Link
+                            href="https://www.linkedin.com/company/computer-science-student-union/"
+                            className="text-sm hover:underline"
+                            prefetch={false}
+                        >
+                            LinkedIn
+                        </Link>
+                        <Link
+                            href="mailto:cssu@cdf.toronto.edu"
+                            className="text-sm hover:underline"
+                            prefetch={false}
+                        >
+                            Mail
                         </Link>
                     </nav>
                 </div>
                 <div className="grid gap-2">
                     <h4 className="text-sm font-semibold">Legal</h4>
-                    <nav className="grid gap-1">
-                        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                            Privacy Policy
-                        </Link>
-                        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                            Terms of Service
-                        </Link>
-                        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                            Cookie Policy
-                        </Link>
+                    <nav className="grid gap-1 credits">
+                        Website built by <a href="https://www.barisbayazit.com/">Barış Bayazıt</a>,{' '}
+                        <a href="https://www.gabe.biz/">Gabriel Thompson</a>, and{' '}
+                        <a href="https://www.linkedin.com/in/eren-aydin-1940321b1/">Eren Aydin</a>{' '}
+                        of the CSSU web department. Supervised by{' '}
+                        <a href="https://github.com/JasonBarahan">Jason Barahan</a> and{' '}
+                        <a href="https://github.com/hydrabeer">Zachary Muir</a>.
                     </nav>
                 </div>
             </div>
@@ -54,17 +74,7 @@ export default function Footer() {
                 <p className="text-xs text-muted-foreground">
                     &copy; 2024 CSSU. All rights reserved.
                 </p>
-                <nav className="flex items-center gap-4">
-                    <Link href="#" className="text-xs hover:underline" prefetch={false}>
-                        Privacy
-                    </Link>
-                    <Link href="#" className="text-xs hover:underline" prefetch={false}>
-                        Terms
-                    </Link>
-                    <Link href="#" className="text-xs hover:underline" prefetch={false}>
-                        Sitemap
-                    </Link>
-                </nav>
+                <nav className="flex items-center gap-4"></nav>
             </div>
         </footer>
     )

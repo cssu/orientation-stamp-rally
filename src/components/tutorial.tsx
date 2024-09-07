@@ -73,9 +73,28 @@ export default function Tutorial() {
                         </li>
                         <center>
                             <Image
-                                alt="Image of dashboard page"
+                                alt="Image of taking a photo of the QR code"
                                 src="/tutorial_photos/qrscanner.png"
                                 width={200}
+                                height={300}
+                            />
+                        </center>
+                        <li>
+                            Upon clicking the link from the QR code, you should be redirected to a
+                            page stating that you have collected that stamp. It is possible that you
+                            will get a message saying that the QR code has expired (they updated
+                            frequently!). If that happens, just re-scan the QR code.
+                        </li>
+                        <li>
+                            After this, you should be able to see your new stamp under the
+                            &ldquo;Stamps&rdquo; from your dashboard. This page will look something
+                            like:
+                        </li>
+                        <center>
+                            <Image
+                                alt="Image of the stamps page"
+                                src="/tutorial_photos/stampspage.png"
+                                width={300}
                                 height={300}
                             />
                         </center>
