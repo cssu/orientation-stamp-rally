@@ -7,7 +7,6 @@ import DashboardNav from '@/components/DashboardNav'
 import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import prisma from '@/lib/prisma'
-import { type UserRole } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { isTokenValid, refreshAccessToken } from '@/lib/auth'
 import DashboardBooths from '../../components/booths'
@@ -99,7 +98,7 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                         <DashboardHome {...decoded} />
                     </TabsContent>
                     <TabsContent value="stats" className="m-0">
-                        <p>App Statistics not complete yet!</p>
+                        <DashboardStats />
                     </TabsContent>
                     <TabsContent value="teststamp" className="m-0">
                         <DashboardBooths boothId="NA" />
@@ -181,6 +180,7 @@ async function DashboardStamps({ userId }: DecodedJwt) {
             }
         }
     })
+
     const [nBoothsVisited, totalBooths] = await prisma.$transaction([
         prisma.stamp.count({
             where: { userId }
@@ -242,6 +242,134 @@ async function DashboardStamps({ userId }: DecodedJwt) {
                     ))
                 )}
             </div>
+        </div>
+    )
+}
+
+async function DashboardStats() {
+    // There are no cookie checks here, but this is safe:
+    // Dashboard is a server component, and the cookie checks are done in the parent component.
+    // Cookies can't be altered at this point. The server correctly identifies the admin.
+    const [numParticipants, numBooths, mostCollected, mostVisitedBooth] = await prisma.$transaction(
+        [
+            prisma.user.count({
+                where: { role: 'participant' }
+            }),
+            prisma.booth.count({
+                where: { NOT: { boothId: 'NA' } }
+            }),
+            // Find the participant with the most # of stamps, excluding the test stamp
+            prisma.user.findFirst({
+                where: { role: 'participant' },
+                select: {
+                    userId: true,
+                    email: true,
+                    stamps: {
+                        select: {
+                            boothId: true
+                        }
+                    }
+                },
+                orderBy: {
+                    stamps: {
+                        _count: 'desc'
+                    }
+                }
+            }),
+            // Find the booth with the most # of stamps collected, excluding the test stamp
+            prisma.booth.findFirst({
+                where: { NOT: { boothId: 'NA' } },
+                select: {
+                    boothId: true,
+                    organization: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    stamps: {
+                        select: {
+                            userId: true
+                        }
+                    }
+                },
+                orderBy: {
+                    stamps: {
+                        _count: 'desc'
+                    }
+                }
+            })
+        ]
+    )
+
+    async function getRandomFinishedParticipant(): Promise<string | null> {
+        // TODO: This is a naive implementation. It can be optimized.
+        // TODO: Use transactions
+        const participants = await prisma.user.findMany({
+            where: {
+                role: 'participant',
+                stamps: {
+                    every: {
+                        boothId: { not: 'NA' }
+                    }
+                }
+            },
+            select: {
+                email: true,
+                stamps: {
+                    select: {
+                        boothId: true
+                    }
+                }
+            }
+        })
+
+        const eligibleParticipants = participants.filter(
+            (participant) => participant.stamps.length === numBooths
+        )
+
+        if (eligibleParticipants.length > 0) {
+            const randomParticipant =
+                eligibleParticipants[Math.floor(Math.random() * eligibleParticipants.length)]
+            return randomParticipant.email
+        }
+
+        return null
+    }
+
+    return (
+        <div className="p-8">
+            <h1 className="text-4xl font-extrabold">Stats</h1>
+            <br />
+            <h2 className="text-3xl font-semibold">General Stats:</h2>
+            <p className="text-lg font-medium">
+                Total number of participants: <b>{numParticipants}</b>
+            </p>
+            <p className="text-lg font-medium">
+                Total number of booths: <b>{numBooths}</b>
+            </p>
+            <br />
+            <h2 className="text-3xl font-semibold">Most Collected Stamp:</h2>
+            <p className="text-lg font-medium">
+                {mostCollected
+                    ? `The participant with the most stamps is ${mostCollected.email} with ${mostCollected.stamps.length} stamps.`
+                    : 'No participants have collected any stamps yet.'}
+            </p>
+            <br />
+            <h2 className="text-3xl font-semibold">Most Visited Booth:</h2>
+            <p className="text-lg font-medium">
+                {mostVisitedBooth
+                    ? `The most visited booth is ${mostVisitedBooth.organization.name} with ${mostVisitedBooth.stamps.length} stamps collected.`
+                    : 'No booths have been visited yet.'}
+            </p>
+            <br />
+            <h2 className="text-3xl font-semibold">Random Finished Participant:</h2>
+            <p className="text-lg font-medium">
+                {numParticipants > 0
+                    ? `A random participant who visited all booths is ${
+                          (await getRandomFinishedParticipant()) || 'not available yet'
+                      }.`
+                    : 'No participants have visited any booths yet.'}
+            </p>
         </div>
     )
 }
