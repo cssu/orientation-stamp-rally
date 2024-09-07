@@ -41,6 +41,7 @@ model Organization {
   organizationId String   @id @default(uuid()) @db.Uuid
   name           String   @db.VarChar(100)
   createdAt      DateTime @default(now()) @db.Timestamp(0)
+  logo           String?  @db.VarChar(255) // file name relative to /public/logo
 
   booths Booth[]
   User   User[]

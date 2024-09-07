@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation'
 import { isTokenValid, refreshAccessToken } from '@/lib/auth'
 import DashboardBooths from '../../components/booths'
 import { DecodedJwt } from '@/lib/types'
+import Image from 'next/image'
 
 export default async function Dashboard() {
     // Why the cookie must be present: This is ensured by the middleware. However,
@@ -84,6 +85,9 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
                     <TabsContent value="booths" className="m-0">
                         <DashboardBooths boothId={boothId} />
                     </TabsContent>
+                    <TabsContent value="stamps" className="m-0">
+                        <DashboardStamps {...decoded} />
+                    </TabsContent>
                 </div>
             )
         case 'admin':
@@ -115,14 +119,15 @@ async function DashboardHome({ userId, role }: DecodedJwt) {
                     <p className="text-xl font-medium">
                         {remainingBooths == 0
                             ? 'Congratulations! You have collected all stamps.'
-                            : `You have visited ${nBoothsVisited} booths. You can still visit ${remainingBooths} booths!`}
+                            : `You have visited ${nBoothsVisited} booth${
+                                  nBoothsVisited === 1 ? '' : 's'
+                              }. You can still visit ${remainingBooths} booths!`}
                     </p>
                     <br />
                     <h2 className="text-3xl font-semibold">How it Works:</h2>
                     <p className="text-lg">
                         Visit each club booths and scan the QR code within 10 seconds to get a
-                        stamp. Once
-                        {'more details here'}
+                        stamp.
                     </p>
                 </div>
             )
@@ -154,7 +159,15 @@ async function DashboardHome({ userId, role }: DecodedJwt) {
 async function DashboardStamps({ userId }: DecodedJwt) {
     const stamps = await prisma.stamp.findMany({
         where: { userId },
-        include: { booth: true }
+        include: {
+            booth: {
+                select: {
+                    organization: {
+                        select: { logo: true, name: true }
+                    }
+                }
+            }
+        }
     })
 
     return (
@@ -169,7 +182,14 @@ async function DashboardStamps({ userId }: DecodedJwt) {
                 ) : (
                     stamps.map((stamp) => (
                         <div key={stamp.stampId} className="flex flex-col items-center">
-                            <p className="text-lg font-semibold">{stamp.booth.description}</p>
+                            {stamp.booth.organization.logo && (
+                                <Image
+                                    src={`/logos/${stamp.booth.organization.logo}`}
+                                    alt={`${stamp.booth.organization.name} Stamp`}
+                                    width={200}
+                                    height={200}
+                                />
+                            )}
                         </div>
                     ))
                 )}
