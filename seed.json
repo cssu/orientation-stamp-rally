@@ -85,11 +85,11 @@
             "logo": "uoftblueprint.jpeg"
         },
         {
-            "email": "baris.bayazit@mail.utoronto.ca",
+            "email": "gabriel.thompson@mail.utoronto.ca",
             "club": "UofT Compilers",
             "booth": "B10",
             "logo": ""
         }
     ],
-    "admins": ["gabriel.thompson@mail.utoronto.ca", "j.barahan@mail.utoronto.ca"]
+    "admins": ["jason.barahan@mail.utoronto.ca"]
 }

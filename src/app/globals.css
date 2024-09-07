@@ -3,12 +3,15 @@
 @tailwind utilities;
 
 .dashboard-desktop,
-.dashboard-mobile {
+.dashboard-mobile,
+.mainpage-desktop,
+.mainpage-mobile {
     display: none;
 }
 
 @media (min-width: 768px) {
-    .dashboard-desktop {
+    .dashboard-desktop,
+    .mainpage-desktop {
         display: block;
     }
 
@@ -18,11 +21,17 @@
 }
 
 @media (max-width: 767px) {
-    .dashboard-mobile {
+    .dashboard-mobile,
+    .mainpage-mobile {
         display: block;
     }
 
     .tabs {
         display: block;
     }
+}
+
+.tutorial > *,
+.tutorial > ol > li {
+    margin-bottom: 15px;
 }
