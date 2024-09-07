@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Login from '@/components/login'
 import Tutorial from '@/components/tutorial'
+import Schedule from '@/components/schedule'
+import PartnerCardStack from '@/components/partners'
 
 export default function Home() {
     // const [accessedBooths, setAccessedBooths] = useState<any>(null)
@@ -67,18 +69,12 @@ export default function Home() {
                     </div>
                     <div className="mainpage-desktop flex">
                         <div className="relative ms-4 p-4">
-                            <Image
-                                priority
-                                className="w-full rounded-md dark:invert"
-                                src="/cssu-integrated.svg"
-                                alt="CSSU logo with text reading 'Computer Science Student Union'"
-                                width={506}
-                                height={504}
-                            />
+                            <PartnerCardStack />
                         </div>
                     </div>
                 </div>
             </div>
+            <Schedule highlightedIndex={4} />
         </main>
     )
 }
