@@ -71,6 +71,14 @@ export default function Tutorial() {
                             towards the QR code. A link should appear below the QR code. Click on
                             this link to log your attendance.
                         </li>
+                        <center>
+                            <Image
+                                alt="Image of dashboard page"
+                                src="/tutorial_photos/qrscanner.png"
+                                width={200}
+                                height={300}
+                            />
+                        </center>
                     </ol>
                 </div>
             </DialogContent>

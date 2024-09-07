@@ -205,8 +205,7 @@ async function DashboardStamps({ userId }: DecodedJwt) {
                             key={stamp.stampId}
                             style={{
                                 border: '2px solid lightgrey',
-                                maxWidth: '80%',
-                                paddingRight: 30,
+                                width: 'fit-content',
                                 borderRadius: 20,
                                 backgroundColor: 'white'
                             }}
@@ -222,7 +221,14 @@ async function DashboardStamps({ userId }: DecodedJwt) {
                                             height={100}
                                             className="align-middle"
                                         />
-                                        <p style={{ fontSize: 30 }} className="m-auto">
+                                        <p
+                                            style={{
+                                                fontSize: 30,
+                                                marginLeft: 20,
+                                                marginRight: 40
+                                            }}
+                                            className="m-auto"
+                                        >
                                             <b>
                                                 <i>{stamp.booth.organization.name}</i>
                                             </b>
