@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 
-function DashboardBooths({ boothId }: { boothId: string }) {
+export default function DashboardBooths({ boothId }: { boothId: string }) {
     const [qrCodeValue, setQrCodeValue] = useState<string>('')
     const [remainingSeconds, setRemainingSeconds] = useState<number>(10)
 
@@ -56,5 +56,3 @@ function DashboardBooths({ boothId }: { boothId: string }) {
         </div>
     )
 }
-
-export default DashboardBooths
