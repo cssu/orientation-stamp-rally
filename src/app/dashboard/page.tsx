@@ -149,8 +149,6 @@ async function DashboardHome({ userId, role }: DecodedJwt) {
                 </div>
             )
     }
-
-    return null
 }
 
 async function DashboardStamps({ userId }: DecodedJwt) {
