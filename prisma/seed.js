@@ -5,7 +5,7 @@ const path = require('path')
 
 // The entire file can be optimized by using insertMany, but I'm not bothering with that
 // just for 10 clubs and a few admins!
-const seedingPrisma = new PrismaClient()
+const seedingPrisma = new PrismaClient() 
 
 const data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../seed.json'), 'utf-8'))
 
