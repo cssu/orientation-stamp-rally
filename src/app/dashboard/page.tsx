@@ -119,7 +119,7 @@ async function DashboardHome({ userId, email, role }: DecodedJwt) {
         prisma.booth.count()
     ])
 
-    const nBoothsVisited = res[0] - 1
+    const nBoothsVisited = Math.max(res[0] - 1, 0)
     const remainingBooths = res[1] - nBoothsVisited
 
     switch (role) {
