@@ -1,8 +1,6 @@
 'use client'
 
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import CountUp from '@/components/countup'
-import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Login from '@/components/login'
 import Tutorial from '@/components/tutorial'
