@@ -47,27 +47,50 @@ export default function DashboardNav({ role }: { role: UserRole }) {
     }
 
     return (
-        <div className="w-64 h-full mt-8">
-            <Separator />
-            <TabsList className="group flex flex-col gap-4 py-2 h-full">
-                <nav className="grid gap-2 px-4">
+        <>
+            <div className="dashboard-mobile w-full">
+                <Separator />
+                <TabsList className="group flex flex-row gap-4 py-2 px-4">
                     {links.map((link: any, index: any, value: any) => (
                         <TabsTrigger
                             className={cn(
                                 buttonVariants({ variant: link.variant, size: 'lg' }),
                                 link.variant === 'default' &&
                                     'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white',
-                                'justify-start'
+                                'flex items-center'
                             )}
                             key={index}
                             value={link.value}
                         >
-                            <link.icon className="mr-4 h-6 w-6" />
+                            <link.icon className="mr-2 h-6 w-6" />
                             {link.title}
                         </TabsTrigger>
                     ))}
-                </nav>
-            </TabsList>
-        </div>
+                </TabsList>
+            </div>
+
+            <div className="w-64 dashboard-desktop h-full mt-8">
+                <Separator />
+                <TabsList className="group flex flex-col gap-4 py-2 h-full">
+                    <nav className="grid gap-2 px-4">
+                        {links.map((link: any, index: any, value: any) => (
+                            <TabsTrigger
+                                className={cn(
+                                    buttonVariants({ variant: link.variant, size: 'lg' }),
+                                    link.variant === 'default' &&
+                                        'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white',
+                                    'justify-start'
+                                )}
+                                key={index}
+                                value={link.value}
+                            >
+                                <link.icon className="mr-4 h-6 w-6" />
+                                {link.title}
+                            </TabsTrigger>
+                        ))}
+                    </nav>
+                </TabsList>
+            </div>
+        </>
     )
 }
