@@ -6,8 +6,7 @@ import {
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle
+    NavigationMenuTrigger
 } from '@/components/ui/navigation-menu'
 import React from 'react'
 import Link from 'next/link'
@@ -15,6 +14,7 @@ import Login from './login'
 import { isRefreshTokenValid } from '@/lib/auth'
 import { cookies } from 'next/headers'
 import { DarkModeToggle } from './dark-mode-toggle'
+import Logout from './logout'
 
 export default async function NavigationList() {
     const refreshToken = cookies().get('refreshToken')?.value
@@ -22,7 +22,7 @@ export default async function NavigationList() {
 
     return (
         <NavigationMenu>
-            <NavigationMenuList className='space-x-4'>
+            <NavigationMenuList className="space-x-4">
                 <NavigationMenuItem>
                     <DarkModeToggle />
                 </NavigationMenuItem>
@@ -61,22 +61,16 @@ export default async function NavigationList() {
                         </ul>
                     </NavigationMenuContent>
                 </NavigationMenuItem>
-                {/* <NavigationMenuItem>
-                    <Link href="/docs" legacyBehavior passHref>
-                        <NavigationMenuLink
-                            className={cn(navigationMenuTriggerStyle(), 'bg-background')}
-                        >
-                            Blablabla
-                        </NavigationMenuLink>
-                    </Link>
-                </NavigationMenuItem> */}
                 <NavigationMenuItem>
                     {refreshTokenIsValid ? (
-                        <Link href="/dashboard" legacyBehavior passHref>
-                            <NavigationMenuLink className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-neutral-300 bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90 h-9 px-4 py-2">
-                                Dashboard
-                            </NavigationMenuLink>
-                        </Link>
+                        <div className="flex space-x-4">
+                            <Logout refreshToken={refreshToken!} />
+                            <Link href="/dashboard" legacyBehavior passHref>
+                                <NavigationMenuLink className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-neutral-300 bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90 h-9 px-4 py-2">
+                                    Dashboard
+                                </NavigationMenuLink>
+                            </Link>
+                        </div>
                     ) : (
                         <Login />
                     )}
