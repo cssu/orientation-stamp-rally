@@ -112,15 +112,14 @@ async function DashboardContent({ decoded }: { decoded: DecodedJwt }) {
 }
 
 async function DashboardHome({ userId, email, role }: DecodedJwt) {
-    const res = await prisma.$transaction([
+    const [nBoothsVisited, remainingBooths] = await prisma.$transaction([
         prisma.stamp.count({
             where: { userId }
         }),
-        prisma.booth.count()
+        prisma.booth.count({
+            where: { NOT: { boothId: 'NA' } }
+        })
     ])
-
-    const nBoothsVisited = Math.max(res[0] - 1, 0)
-    const remainingBooths = res[1] - nBoothsVisited
 
     switch (role) {
         case 'participant':
