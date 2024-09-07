@@ -6,7 +6,6 @@ import { QRCodeSVG } from 'qrcode.react'
 function DashboardBooths({ boothId }: { boothId: string }) {
     const [qrCodeValue, setQrCodeValue] = useState<string>('')
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const generateQrCodeData = async () => {
         const response = await fetch('/api/leader', {
             method: 'POST'

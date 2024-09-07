@@ -27,6 +27,6 @@
         "**/*.tsx",
         ".next/types/**/*.ts",
         "src/components/ui/grid.pops.ts.js"
-, "prisma/seed.js"    ],
+    ],
     "exclude": ["node_modules"]
 }
