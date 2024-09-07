@@ -26,7 +26,7 @@ async function sendOtp(email: string, otp: string) {
         return
     }
 
-    mail.sendMail({
+    await mail.sendMail({
         from: 'CSSU <cssu@vm004>',
         to: email,
         subject: 'Your OTP for CSSU Orientation Portal',
