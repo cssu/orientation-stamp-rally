@@ -1,0 +1,11 @@
+{
+    "clubs": [
+        {
+            "email": "bigchungusclub@uwaterloo.ca",
+            "club": "Big Chungus Club",
+            "booth": "A1",
+            "logo": "chungus.png"
+        }
+    ],
+    "admins": ["uoft_better@mail.utoronto.ca"]
+}
